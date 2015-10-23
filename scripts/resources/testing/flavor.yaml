@@ -1,0 +1,17 @@
+flavors:
+  - cpu: 2
+    ram: 4
+    disk: 10
+    type: hpc
+  - cpu: 4
+    ram: 4
+    disk: 20
+    type: hpc
+  - cpu: 2
+    ram: 4
+    disk: 10
+    type: ha_localdisk
+  - cpu: 2
+    ram: 4
+    disk: 60
+    type: ha_localdisk
