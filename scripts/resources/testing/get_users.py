@@ -13,8 +13,14 @@ auth = v3.Password(auth_url=environ['OS_AUTH_URL'],
                    user_domain_name='Default')
 
 sess = session.Session(auth=auth)
+#
+#
+# ks = client.Client(session=sess)
+# users = ks.users.list()
+# print users
 
-
-ks = client.Client(session=sess)
-users = ks.users.list()
-print users
+a = sess.get('/v3/users',
+             endpoint_filter={'service_type': 'identity',
+                              'interface': 'internalURL',
+                              'region_name': 'RegionOne'})
+print a
