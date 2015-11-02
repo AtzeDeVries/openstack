@@ -6,6 +6,11 @@ from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
 
+# some situations
+#   user created in ad -> sync to keystone
+#   then removed ad -> disabled keystone
+#   added in ad -> enabled keystone
+
 
 host = '10.21.1.74'
 ks_ad_group_sync_id = 'ae41c863c3474201957e330885deda5e'
@@ -65,7 +70,6 @@ def user_exists(username):
 def user_enabled(username):
     return ks.users.list(name=username)[0].enabled
 
-
 def user_member_of(conn,dn):
     groups = []
     conn.search(attributes=['Name'],
@@ -83,6 +87,21 @@ def groups_in_group(conn,groupname):
         groups.append(str(g['Name']))
 
     return groups
+
+def gather_ad_groups(conn):
+    grp = []
+    for g in  groups_in_group(conn,'Openstack - All users'):
+        if not g[:12] == 'Openstack - ':
+            print "WARNING: %s is not a good group name" % g
+            continue
+        grp.append('Research Group - %s' % g[:12])
+
+def added_groups(ad_flat_groups,ks_groups):
+    return [x for x in ad_flat_groups if x not in ks_groups]
+
+def removed_groups(ad_flat_groups,ks_groups)):
+    return [x for x in ks_groups if x not in ad_flat_groups]
+
 
 def users_in_group(conn,groupname):
     users = []
@@ -106,22 +125,34 @@ def users_in_group(conn,groupname):
 if c.bind():
     print 'Sync these users'
     all_users = users_in_group(c,'Openstack - All Users')
-    ks_users = [u.name for u in ks.users.list(group=ks_ad_group_sync_id)]
-    # for i in all_users:
-    #     print i['username']
-
-    #sync = sync_lists([u['username'] for u in all_users ],['camiel.doorenweerd','kevin.beentjes','pietje'])
+    ks_users = [u.name for u in ks.users.list(group=ks_ad_group_sync_id,enabled=True)]
+    ks_users_disabled = [u.name for u in ks.users.list(group=ks_ad_group_sync_id,enabled=False)]
+    ks_group_list = [g.name for g in ks.groups.list() if g.name[:17] == 'Research Group - ']
+    ad_added_groups = added_groups(gather_ad_groups(c),ks_group_list)
+    ad_removed_groups = removed_groups(gather_ad_groups(c),ks_group_list)
 
     for u in add_users_objects(all_users,ks_users):
         print "Checking if %s already exists : %s" % ( u['username'], str(user_exists(u['username'])) )
         if user_exists(u['username']):
-             print "Checking if %s is enabled: %s" % (u['username'],str(user_enabled(u['username'])))
+            # So user already exists what should we do
+                if u['username'] in ks_users_disabled:
+                    # so user is in the list of disabled users and in the ad sync group
+                    print "Run function to enable user"
+                else:
+                    # user is disabled but not in ad sync group
+                    print "don't do anything"
+        else:
+            print "Run function to create user %s" % u['username']
 
         #print "adding %s %s with\nUsername: %s\nMail: %s\n----------------" % (u['firstname'],u['lastname'],u['username'],u['mail'])
     for u in  disable_users(all_users,ks_users):
-        print "removing user: %s" % u
+        print "disable user: %s" % u
 
+    for g in ad_added_groups:
+        print "add group %s" % g
 
+    for g in ad_removed_groups:
+        print "remove group %s" % g
 
     print '\nSync users in groups'
     for i in groups_in_group(c,'Openstack - All Users'):
