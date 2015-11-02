@@ -114,7 +114,7 @@ if c.bind():
 
     for u in add_users_objects(all_users,ks_users):
         print "Checking if %s already exists : %s" % ( u['username'], str(user_exists(u['username'])) )
-        if not user_exists(u['username']):
+        if user_exists(u['username']):
              print "Checking if %s is enabled: %s" % (u['username'],str(user_enabled(u['username'])))
 
         #print "adding %s %s with\nUsername: %s\nMail: %s\n----------------" % (u['firstname'],u['lastname'],u['username'],u['mail'])
