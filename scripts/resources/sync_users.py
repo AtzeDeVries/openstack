@@ -95,6 +95,7 @@ def gather_ad_groups(conn):
             print "WARNING: %s is not a good group name" % g
             continue
         grp.append('Research Group - %s' % g[:12])
+    return grp
 
 def added_groups(ad_flat_groups,ks_groups):
     return [x for x in ad_flat_groups if x not in ks_groups]
