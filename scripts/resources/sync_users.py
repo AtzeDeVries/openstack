@@ -165,8 +165,8 @@ if c.bind():
         users_ks = ks_users_list(group=get_id_ks_group("Research Group - %s" % i[12:]))
         added = [x for x in users_ad if x not in users_ks]
         removed = [x for x in users_ks if x not in users_ad]
-        print "Added: %s" %s added
-        print "Removed: %s" %s removed
+        print "Added: %s" % added
+        print "Removed: %s" % removed
         print "\n"
 
 
