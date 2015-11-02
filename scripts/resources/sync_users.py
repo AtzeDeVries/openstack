@@ -99,7 +99,7 @@ def gather_ad_groups(conn):
 def added_groups(ad_flat_groups,ks_groups):
     return [x for x in ad_flat_groups if x not in ks_groups]
 
-def removed_groups(ad_flat_groups,ks_groups)):
+def removed_groups(ad_flat_groups,ks_groups):
     return [x for x in ks_groups if x not in ad_flat_groups]
 
 
