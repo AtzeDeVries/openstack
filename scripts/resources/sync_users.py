@@ -123,6 +123,9 @@ def users_in_group(conn,groupname):
                       'dn': str(u['distinguishedName'])})
     return users
 
+def get_id_ks_group(grp):
+    return ks.groups.list(name=grp)[0].id
+
 if c.bind():
     print 'Sync these users'
     all_users = users_in_group(c,'Openstack - All Users')
@@ -141,7 +144,7 @@ if c.bind():
                     print "Run function to enable user"
                 else:
                     # user is disabled but not in ad sync group
-                    print "don't do anything"
+                    print "don't do anything, user is disabled but not in ad sync"
         else:
             print "Run function to create user %s" % u['username']
 
@@ -158,8 +161,13 @@ if c.bind():
     print '\nSync users in groups'
     for i in groups_in_group(c,'Openstack - All Users'):
         print "Group: Research Group - %s" % i[12:]
-        for u in users_in_group(c,i):
-            print "* %s" % u['username']
+        users_ad = [ u['username'] for u in users_in_group(c,i) ]
+        users_ks = ks_users_list(group=get_id_ks_group("Research Group - %s" % i[12:]))
+        added = [x for x in users_ad if x not in users_ks]
+        removed = [x for x in users_ks if x not in users_ad]
+        print "Added: %s" %s added
+        print "Removed: %s" %s removed
+        print "\n"
 
 
 c.unbind()
