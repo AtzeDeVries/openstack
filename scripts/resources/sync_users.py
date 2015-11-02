@@ -124,7 +124,10 @@ def users_in_group(conn,groupname):
     return users
 
 def get_id_ks_group(grp):
-    return ks.groups.list(name=grp)[0].id
+    try:
+        return ks.groups.list(name=grp)[0].id
+    except:
+        return False
 
 if c.bind():
     print 'Sync these users'
@@ -162,12 +165,15 @@ if c.bind():
     for i in groups_in_group(c,'Openstack - All Users'):
         print "Group: Research Group - %s" % i[12:]
         users_ad = [ u['username'] for u in users_in_group(c,i) ]
-        users_ks = ks.users.list(group=get_id_ks_group("Research Group - %s" % i[12:]))
-        added = [x for x in users_ad if x not in users_ks]
-        removed = [x for x in users_ks if x not in users_ad]
-        print "Added: %s" % added
-        print "Removed: %s" % removed
-        print "\n"
+        if get_id_ks_group("Research Group - %s" % i[12:]):
+            users_ks = ks.users.list(group=get_id_ks_group("Research Group - %s" % i[12:]))
+            added = [x for x in users_ad if x not in users_ks]
+            removed = [x for x in users_ks if x not in users_ad]
+            print "Added: %s" % added
+            print "Removed: %s" % removed
+            print "\n"
+        else:
+            print "group does not excists"
 
 
 c.unbind()
