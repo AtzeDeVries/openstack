@@ -94,7 +94,7 @@ def gather_ad_groups(conn):
         if not g[:12] == 'Openstack - ':
             print "WARNING: %s is not a good group name" % g
             continue
-        grp.append('Research Group - %s' % g[:12])
+        grp.append('Research Group - %s' % g[12:])
     return grp
 
 def added_groups(ad_flat_groups,ks_groups):
