@@ -156,8 +156,8 @@ if c.bind():
         print "remove group %s" % g
 
     print '\nSync users in groups'
-    for i in gather_ad_groups(c):
-        print "Group: %s" % i
+    for i in groups_in_group(c,'Openstack - All Users'):
+        print "Group: Research Group - %s" % i[12:]
         for u in users_in_group(c,i):
             print "* %s" % u['username']
 
