@@ -59,6 +59,12 @@ def disable_users(ad_user_object,keystone):
     adusers = [u['username'] for u in ad_user_object ]
     return [x for x in keystone if x not in adusers]
 
+def user_exists(username):
+    return len(ks.users.list(name=username)) != 0
+
+def user_enabled(username):
+    return ks.users.list(name=username)[0].enabled
+
 
 def user_member_of(conn,dn):
     groups = []
@@ -107,7 +113,10 @@ if c.bind():
     #sync = sync_lists([u['username'] for u in all_users ],['camiel.doorenweerd','kevin.beentjes','pietje'])
 
     for u in add_users_objects(all_users,ks_users):
-        print "adding %s %s with\nUsername: %s\nMail: %s\n----------------" % (u['firstname'],u['lastname'],u['username'],u['mail'])
+        print "Checking if %s already exists : %s" % (u['username'],str(user_exists(u['username']))
+        print "Checking if %s is enabled: %s" % (u['username'],str(user_enabled(u['username'])))
+        
+        #print "adding %s %s with\nUsername: %s\nMail: %s\n----------------" % (u['firstname'],u['lastname'],u['username'],u['mail'])
     for u in  disable_users(all_users,ks_users):
         print "removing user: %s" % u
 
