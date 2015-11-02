@@ -8,6 +8,7 @@ from keystoneclient.v3 import client
 
 
 host = '10.21.1.74'
+ks_ad_group_sync_id = 'ae41c863c3474201957e330885deda5e'
 
 try:
     user = environ['AD_USER']
@@ -99,7 +100,7 @@ def users_in_group(conn,groupname):
 if c.bind():
     print 'Sync these users'
     all_users = users_in_group(c,'Openstack - All Users')
-    ks_users = [u.name for u in ks.users.list()]
+    ks_users = [u.name for u in ks.users.list(group=ks_ad_group_sync_id)]
     # for i in all_users:
     #     print i['username']
 
