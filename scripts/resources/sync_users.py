@@ -166,7 +166,7 @@ if c.bind():
         print "Group: Research Group - %s" % i[12:]
         users_ad = [ u['username'] for u in users_in_group(c,i) ]
         if get_id_ks_group("Research Group - %s" % i[12:]):
-            users_ks = ks.users.list(group=get_id_ks_group("Research Group - %s" % i[12:]))
+            users_ks = [u.name for u in ks.users.list(group=get_id_ks_group("Research Group - %s" % i[12:]))]
             added = [x for x in users_ad if x not in users_ks]
             removed = [x for x in users_ks if x not in users_ad]
             print "Added: %s" % added
