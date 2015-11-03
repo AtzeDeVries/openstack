@@ -150,3 +150,37 @@ def delete_group(client,groupname):
     except Exception as e:
         log.logger.error('Unable to delete group %s. Error: %s' % (groupname,e))
         return False
+
+def add_user_to_group(client,groupname,username):
+    """
+    Adds user to group in keystone, Takes:
+    * keystone client object
+    * groupname
+    * username
+    Returns True if succeeded, false if issues
+    """
+    try:
+        gid = client.groups.list(name=groupname)[0].id
+        uid = client.users.list(name=username)[0].id
+        client.users.add_to_group(uid,gid)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to add %s group %s. Error: %s' % (username,groupname,e))
+        return False
+
+def remove_user_to_group(client,groupname,username):
+    """
+    Remove user to group in keystone, Takes:
+    * keystone client object
+    * groupname
+    * username
+    Returns True if succeeded, false if issues
+    """
+    try:
+        gid = client.groups.list(name=groupname)[0].id
+        uid = client.users.list(name=username)[0].id
+        client.users.remove_from_group(uid,gid)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to remove %s group %s. Error: %s' % (username,groupname,e))
+        return False

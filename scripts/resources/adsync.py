@@ -96,8 +96,18 @@ def sync_membership():
             users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]))]
             added = [x for x in users_ad if x not in users_ks]
             removed = [x for x in users_ks if x not in users_ad]
-            log.logger.info("Added: %s" % added)
-            log.logger.info("Removed: %s" % removed)
+
+            for u in added:
+                if ks.add_user_to_group(ksclient,"Research Group - %s" % i[12:],u):
+                    log.logger.info("Added user %s to group %s" % (u,"Research Group - %s" % i[12:]))
+                else:
+                    log.logger.error("Adding user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
+
+            for u in removed:
+                if ks.add_user_to_group(ksclient,"Research Group - %s" % i[12:],u):
+                    log.logger.info("Removed user %s to group %s" % (u,"Research Group - %s" % i[12:]))
+                else:
+                    log.logger.error("Removing user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
         else:
             log.logger.warning("Group %s does not available!" % i)
 
