@@ -5,7 +5,7 @@ from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
 
-from lib import ad
+from lib import ad as ad
 
 # some situations
 #   user created in ad -> sync to keystone
