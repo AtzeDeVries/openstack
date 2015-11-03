@@ -83,8 +83,8 @@ def create_user(client,username,sync_group_id):
                             email=username+'@naturalis.nl',
                             password=generate_password())
 
-        client.users.add_to_group(name=username,
-                                 group=sync_group_id)
+        client.users.add_to_group(user=username,
+                                  group=sync_group_id)
         return True
     except Exception as e:
         log.logger.error('Unable to create user %s OR add it to group. Error: %s' % (username,e))
