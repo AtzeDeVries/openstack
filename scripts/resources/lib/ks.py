@@ -1,6 +1,10 @@
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from keystoneclient.v3 import client
+from os import urandom
+from string import ascii_letters, digits
+import random
+from . import log
 
 def connect(auth_url,ks_username,ks_password,project_name):
     """
@@ -52,4 +56,36 @@ def get_id_ks_group(client,grp):
     try:
         return ks.groups.list(name=grp)[0].id
     except:
+        return False
+
+def generate_password(numbers=10):
+    """
+    Generates complex password. Takes:
+    * number of digit (default 10)
+    Returns password
+    """
+    chars = ascii_letters + digits + '#$%^*()'
+    random.seed = (urandom(1024))
+    return ''.join(random.choice(chars) for i in range(numbers))
+
+
+def create_user(client,username,sync_group_id):
+    """
+    Creates user in keystone. Takes:
+    * keystone client object
+    * username
+    * keystone id of sync ad user group
+    Returns True is succeeded, false if issues.
+    """
+
+    try:
+        client.users.create(name=username,
+                            email=username+'@naturalis.nl'
+                            password=generate_password())
+
+        client.user.add_to_group(name=user,
+                                 group=sync_group_id)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to create user %s OR add it to group. Error: %s' % (username,e))
         return False

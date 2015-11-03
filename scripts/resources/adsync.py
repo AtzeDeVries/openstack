@@ -6,10 +6,6 @@ from os import environ
 from lib import ad as ad
 from lib import ks as ks
 from lib import log as log
-# some situations
-#   user created in ad -> sync to keystone
-#   then removed ad -> disabled keystone
-#   added in ad -> enabled keystone
 
 
 host = '10.21.1.74'
