@@ -66,8 +66,8 @@ if c.bind():
     ad_removed_groups = removed_groups(ad.gather_ad_groups(c),ks_group_list)
 
     for u in add_users_objects(all_users,ks_users):
-        log.logger.debug("Checking if %s already exists : %s" % ( u['username'], str(user_exists(u['username']))))
-        if user_exists(u['username']):
+        log.logger.debug("Checking if %s already exists : %s" % ( u['username'], str(ks.user_exists(ksclient,u['username']))))
+        if ks.user_exists(ksclient,u['username']):
             # So user already exists what should we do
                 if u['username'] in ks_users_disabled:
                     # so user is in the list of disabled users and in the ad sync group
@@ -94,7 +94,7 @@ if c.bind():
         log.logger.debug("Group: Research Group - %s" % i[12:])
         users_ad = [ u['username'] for u in ad.users_in_group(c,i) ]
         if get_id_ks_group("Research Group - %s" % i[12:]):
-            users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group("Research Group - %s" % i[12:]))]
+            users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]))]
             added = [x for x in users_ad if x not in users_ks]
             removed = [x for x in users_ks if x not in users_ad]
             log.logger.info("Added: %s" % added)
