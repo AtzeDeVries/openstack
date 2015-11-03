@@ -49,7 +49,8 @@ def sync_users():
                 else: # user is disabled but not in ad sync group
                     log.logger.info("don't do anything, user exists but not in ad sync group")
         else:
-            log.logger.info("Run function to create user %s" % u['username'])
+            log.logger.info("Trying to create user %s" % u['username'])
+            ks.create_user(ksclient,u['username'],ks_ad_group_sync_id)
 
     for u in disabled_users:
         log.logger.info("disable user: %s" % u)
