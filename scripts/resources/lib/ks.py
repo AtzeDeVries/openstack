@@ -83,7 +83,7 @@ def create_user(client,username,sync_group_id):
                             email=username+'@naturalis.nl',
                             password=generate_password())
 
-        client.user.add_to_group(name=username,
+        client.users.add_to_group(name=username,
                                  group=sync_group_id)
         return True
     except Exception as e:
