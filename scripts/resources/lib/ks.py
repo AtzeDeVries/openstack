@@ -88,3 +88,34 @@ def create_user(client,username,sync_group_id):
     except Exception as e:
         log.logger.error('Unable to create user %s OR add it to group. Error: %s' % (username,e))
         return False
+
+def enable_user(client,username):
+    """
+    enables user in keystone. Takes:
+    * keystone client object
+    * username
+    Returns True is succeeded, false if issues.
+    """
+
+    try:
+        uid = client.users.list(name=username)[0].id
+        client.users.update(uid,enabled=True)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to enable user %s. Error: %s' % (username,e))
+        return False
+
+def disable_user(client,username):
+    """
+    disables user in keystone. Takes:
+    * keystone client object
+    * username
+    Returns True is succeeded, false if issues.
+    """
+    try:
+        uid = client.users.list(name=username)[0].id
+        client.users.update(uid,enabled=False)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to disable user %s. Error: %s' % (username,e))
+        return False

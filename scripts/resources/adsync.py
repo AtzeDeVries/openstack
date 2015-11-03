@@ -45,15 +45,26 @@ def sync_users():
         log.logger.debug("Checking if %s already exists : %s" % ( u['username'], str(ks.user_exists(ksclient,u['username']))))
         if ks.user_exists(ksclient,u['username']):  # So user already exists what should we do
                 if u['username'] in ks_users_disabled: # so user is in the list of disabled users and in the ad sync group
-                    log.logger.info("Run function to enable user")
+                    log.logger.info("Trying to enable user %s" % u['username'])
+                    if ks.enable_user(ksclient,u['username']):
+                        log.logger.info("Succesfully enabled user %s" % u['username'])
+                    else:
+                        log.logger.error("Unable to enable user %s" % u['username'])
                 else: # user is disabled but not in ad sync group
-                    log.logger.info("don't do anything, user exists but not in ad sync group")
+                    log.logger.info("don't do anything, user %s exists but not in ad sync group" % u['username'])
         else:
             log.logger.info("Trying to create user %s" % u['username'])
-            ks.create_user(ksclient,u['username'],ks_ad_group_sync_id)
+            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id):
+                log.logger.info("Succesfully to created user %s" % u['username'])
+            else:
+                log.logger.error("Unable to create user %s" % u['username'])
 
     for u in disabled_users:
-        log.logger.info("disable user: %s" % u)
+        log.logger.info("Trying to disable user: %s" % u)
+        if ks.disable_user(ksclient,u):
+            log.logger.info("Succesfully disabale user %s" % u)
+        else:
+            log.logger.error("Unable to disabale user %s" % u)
 
 
 def sync_groups():
