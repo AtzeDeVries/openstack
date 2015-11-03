@@ -80,7 +80,7 @@ def create_user(client,username,sync_group_id):
 
     try:
         client.users.create(name=username,
-                            email=username+'@naturalis.nl'
+                            email=username+'@naturalis.nl',
                             password=generate_password())
 
         client.user.add_to_group(name=user,
