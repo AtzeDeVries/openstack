@@ -74,7 +74,7 @@ if c.bind():
                     log.logger.info("Run function to enable user")
                 else:
                     # user is disabled but not in ad sync group
-                    log.logger.info("don't do anything, user is disabled but not in ad sync")
+                    log.logger.info("don't do anything, user exists but not in ad sync group")
         else:
             log.logger.info("Run function to create user %s" % u['username'])
 
@@ -93,7 +93,7 @@ if c.bind():
     for i in ad.groups_in_group(c,'Openstack - All Users'):
         log.logger.debug("Group: Research Group - %s" % i[12:])
         users_ad = [ u['username'] for u in ad.users_in_group(c,i) ]
-        if get_id_ks_group("Research Group - %s" % i[12:]):
+        if ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]):
             users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]))]
             added = [x for x in users_ad if x not in users_ks]
             removed = [x for x in users_ks if x not in users_ad]
