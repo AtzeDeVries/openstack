@@ -90,7 +90,7 @@ def sync_groups():
 def sync_membership():
 
     for i in ad.groups_in_group(c,'Openstack - All Users'):
-        log.logger.debug("Group: Research Group - %s" % i[12:])
+        log.logger.debug("Syncing group: Research Group - %s" % i[12:])
         users_ad = [ u['username'] for u in ad.users_in_group(c,i) ]
         if ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]):
             users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]))]

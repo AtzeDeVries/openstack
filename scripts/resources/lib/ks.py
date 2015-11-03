@@ -55,7 +55,7 @@ def get_id_ks_group(client,grp):
     Returns id (as string) or False if group not found
     """
     try:
-        return ks.groups.list(name=grp)[0].id
+        return client.groups.list(name=grp)[0].id
     except:
         return False
 
