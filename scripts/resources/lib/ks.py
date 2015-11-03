@@ -4,6 +4,7 @@ from keystoneclient.v3 import client
 from os import urandom
 from string import ascii_letters, digits
 import random
+import time
 from . import log
 
 def connect(auth_url,ks_username,ks_password,project_name):
@@ -113,8 +114,9 @@ def disable_user(client,username):
     Returns True is succeeded, false if issues.
     """
     try:
+        desc = "disabled_at:%s" % time.strftime("%d.%m.%Y")
         uid = client.users.list(name=username)[0].id
-        client.users.update(uid,enabled=False)
+        client.users.update(uid,enabled=False,description=desc)
         return True
     except Exception as e:
         log.logger.error('Unable to disable user %s. Error: %s' % (username,e))
