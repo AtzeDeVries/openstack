@@ -168,7 +168,7 @@ def add_user_to_group(client,groupname,username):
         log.logger.error('Unable to add %s group %s. Error: %s' % (username,groupname,e))
         return False
 
-def remove_user_to_group(client,groupname,username):
+def remove_user_from_group(client,groupname,username):
     """
     Remove user to group in keystone, Takes:
     * keystone client object

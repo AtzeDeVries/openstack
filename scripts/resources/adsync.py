@@ -104,7 +104,7 @@ def sync_membership():
                     log.logger.error("Adding user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
 
             for u in removed:
-                if ks.add_user_to_group(ksclient,"Research Group - %s" % i[12:],u):
+                if ks.remove_user_from_group(ksclient,"Research Group - %s" % i[12:],u):
                     log.logger.info("Removed user %s to group %s" % (u,"Research Group - %s" % i[12:]))
                 else:
                     log.logger.error("Removing user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
