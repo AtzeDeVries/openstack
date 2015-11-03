@@ -66,6 +66,7 @@ if c.bind():
     ks_users = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=True)]
     ks_users_disabled = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=False)]
     added_users = [x for x in all_users if x['username'] not in ks_users]
+    disabled_users = [x for x in ks_users if x not in [q['username'] for q in all_users]]
     ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:17] == 'Research Group - ']
     #ad_added_groups = added_groups(ad.gather_ad_groups(c),ks_group_list)
     ad_added_groups = [x for x in ad.gather_ad_groups(c) if x not in ks_group_list]
@@ -82,7 +83,7 @@ if c.bind():
         else:
             log.logger.info("Run function to create user %s" % u['username'])
 
-    for u in  return [x for x in ks_users if x not in [q['username'] for q in all_users]]:
+    for u in disabled_users:
         log.logger.info("disable user: %s" % u)
 
     log.logger.info('Starting group sync')
