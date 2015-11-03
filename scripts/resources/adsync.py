@@ -35,25 +35,29 @@ except KeyError as e:
 domain = "NNM\\"
 c = ad.connect(host,domain+user,password)
 ksclient = ks.connect(auth_url,ks_username,ks_password,project_name)
-# def sync_lists(activedirectory,keystone):
-#     added = [x for x in activedirectory if x not in keystone]
-#     removed = [x for x in keystone if x not in activedirectory]
-#     return {'added' : added , 'removed' : removed }
-
-def add_users_objects(ad_user_object,keystone):
-    return [x for x in ad_user_object if x['username'] not in keystone]
-
-def disable_users(ad_user_object,keystone):
-    #adusers = [u['username'] for u in ad_user_object ]
-    return [x for x in keystone if x not in [u['username'] for u in ad_user_object]]
-
-def added_groups(ad_flat_groups,ks_groups):
-    return [x for x in ad_flat_groups if x not in ks_groups]
-
-def removed_groups(ad_flat_groups,ks_groups):
-    return [x for x in ks_groups if x not in ad_flat_groups]
 
 
+# def add_users_objects(ad_user_object,keystone):
+#     return [x for x in ad_user_object if x['username'] not in keystone]
+#
+# def disable_users(ad_user_object,keystone):
+#     #adusers = [u['username'] for u in ad_user_object ]
+#     return [x for x in keystone if x not in [u['username'] for u in ad_user_object]]
+
+# def added_groups(ad_flat_groups,ks_groups):
+#     return [x for x in ad_flat_groups if x not in ks_groups]
+#
+# def removed_groups(ad_flat_groups,ks_groups):
+#     return [x for x in ks_groups if x not in ad_flat_groups]
+
+def sync_users:
+    pass
+
+def sync_groups:
+    pass
+
+def sync_membership:
+    pass
 
 
 if c.bind():
@@ -61,25 +65,24 @@ if c.bind():
     all_users = ad.users_in_group(c,'Openstack - All Users')
     ks_users = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=True)]
     ks_users_disabled = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=False)]
+    added_users = [x for x in all_users if x['username'] not in ks_users]
     ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:17] == 'Research Group - ']
-    ad_added_groups = added_groups(ad.gather_ad_groups(c),ks_group_list)
-    ad_removed_groups = removed_groups(ad.gather_ad_groups(c),ks_group_list)
+    #ad_added_groups = added_groups(ad.gather_ad_groups(c),ks_group_list)
+    ad_added_groups = [x for x in ad.gather_ad_groups(c) if x not in ks_group_list]
+    #ad_removed_groups = removed_groups(ad.gather_ad_groups(c),ks_group_list)
+    ad_removed_groups = [x for x in ks_group_list if x not in ad.gather_ad_groups(c)]
 
-    for u in add_users_objects(all_users,ks_users):
+    for u in added_users:
         log.logger.debug("Checking if %s already exists : %s" % ( u['username'], str(ks.user_exists(ksclient,u['username']))))
-        if ks.user_exists(ksclient,u['username']):
-            # So user already exists what should we do
-                if u['username'] in ks_users_disabled:
-                    # so user is in the list of disabled users and in the ad sync group
+        if ks.user_exists(ksclient,u['username']):  # So user already exists what should we do
+                if u['username'] in ks_users_disabled: # so user is in the list of disabled users and in the ad sync group
                     log.logger.info("Run function to enable user")
-                else:
-                    # user is disabled but not in ad sync group
+                else: # user is disabled but not in ad sync group
                     log.logger.info("don't do anything, user exists but not in ad sync group")
         else:
             log.logger.info("Run function to create user %s" % u['username'])
 
-        #print "adding %s %s with\nUsername: %s\nMail: %s\n----------------" % (u['firstname'],u['lastname'],u['username'],u['mail'])
-    for u in  disable_users(all_users,ks_users):
+    for u in  return [x for x in ks_users if x not in [q['username'] for q in all_users]]:
         log.logger.info("disable user: %s" % u)
 
     log.logger.info('Starting group sync')
@@ -100,7 +103,7 @@ if c.bind():
             log.logger.info("Added: %s" % added)
             log.logger.info("Removed: %s" % removed)
         else:
-            log.logger.warning("Group %s does not excist!" % i)
+            log.logger.warning("Group %s does not available!" % i)
 
 
 c.unbind()
