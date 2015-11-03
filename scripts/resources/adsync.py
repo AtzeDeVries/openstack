@@ -35,7 +35,7 @@ except KeyError as e:
 
 domain = "NNM\\"
 
-c = ad.connection(host,domain+user,password)
+c = ad.connect(host,domain+user,password)
 
 auth = v3.Password(auth_url=auth_url,
                    username=ks_username,
