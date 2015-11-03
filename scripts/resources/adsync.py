@@ -62,9 +62,9 @@ def sync_users():
     for u in disabled_users:
         log.logger.info("Trying to disable user: %s" % u)
         if ks.disable_user(ksclient,u):
-            log.logger.info("Succesfully disabale user %s" % u)
+            log.logger.info("Succesfully disabled user %s" % u)
         else:
-            log.logger.error("Unable to disabale user %s" % u)
+            log.logger.error("Unable to disable user %s" % u)
 
 
 def sync_groups():
@@ -74,10 +74,18 @@ def sync_groups():
     ad_removed_groups = [x for x in ks_group_list if x not in ad.gather_ad_groups(c)]
 
     for g in ad_added_groups:
-        log.logger.info("add group %s" % g)
+        log.logger.info("Trying to add group %s" % g)
+        if ks.create_group(ksclient,g):
+            log.logger.info("Succesfully created group %s" % g)
+        else:
+            log.logger.error("Unable to create group %s" % g)
 
     for g in ad_removed_groups:
-        log.logger.info("remove group %s" % g)
+        log.logger.info("Trying to remove group %s" % g)
+        if ks.delete_group(ksclient,g):
+            log.logger.info("Succesfully deleted group %s" % g)
+        else:
+            log.logger.error("Unable to delete group %s" % g)
 
 def sync_membership():
 

@@ -121,3 +121,32 @@ def disable_user(client,username):
     except Exception as e:
         log.logger.error('Unable to disable user %s. Error: %s' % (username,e))
         return False
+
+def create_group(client,groupname):
+    """
+    Creates group in keystone. Takes:
+    * keystone client object
+    * groupname
+    Returns True is succeeded, false if issues.
+    """
+    try:
+        client.groups.create(name=groupname)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to create group %s. Error: %s' % (groupname,e))
+        return False
+
+def delete_group(client,groupname):
+    """
+    Deletes group in keystone. Takes:
+    * keystone client object
+    * groupname
+    Returns True is succeeded, false if issues.
+    """
+    try:
+        gid = client.groups.list(name=groupname)[0].id
+        gobj = client.groups.delete(gid)
+        return True
+    except Exception as e:
+        log.logger.error('Unable to delete group %s. Error: %s' % (groupname,e))
+        return False
