@@ -50,13 +50,13 @@ ksclient = ks.connect(auth_url,ks_username,ks_password,project_name)
 # def removed_groups(ad_flat_groups,ks_groups):
 #     return [x for x in ks_groups if x not in ad_flat_groups]
 
-def sync_users:
+def sync_users():
     pass
 
-def sync_groups:
+def sync_groups():
     pass
 
-def sync_membership:
+def sync_membership():
     pass
 
 
