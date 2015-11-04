@@ -6,6 +6,8 @@ from string import ascii_letters, digits
 import random
 import time
 from . import log
+import smtplib
+from email.mime.text import MIMEText
 
 def connect(auth_url,ks_username,ks_password,project_name):
     """
@@ -70,7 +72,7 @@ def generate_password(numbers=10):
     return ''.join(random.choice(chars) for i in range(numbers))
 
 
-def create_user(client,username,sync_group_id):
+def create_user(client,username,sync_group_id,to_adress):
     """
     Creates user in keystone. Takes:
     * keystone client object
@@ -80,11 +82,13 @@ def create_user(client,username,sync_group_id):
     """
 
     try:
+        pwd = generate_password()
         client.users.create(name=username,
                             email=username+'@naturalis.nl',
-                            password=generate_password())
+                            password=pwd)
         uid = client.users.list(name=username)[0].id
         client.users.add_to_group(uid,sync_group_id)
+        sendaccountmail(to_address,username,pwd)
         return True
     except Exception as e:
         log.logger.error('Unable to create user %s OR add it to group. Error: %s' % (username,e))
@@ -184,3 +188,14 @@ def remove_user_from_group(client,groupname,username):
     except Exception as e:
         log.logger.error('Unable to remove %s group %s. Error: %s' % (username,groupname,e))
         return False
+
+def sendaccountmail(to,username,password):
+    text = "An stack.naturalis.nl account has been created for:\n username: %s\n password: %s" % (username,password)
+    msg = MIMEText(text)
+    msg['Subject'] = 'stack.naturalis.nl account has been created for %s' % username
+    msg['From'] = 'noreply@naturalis.nl'
+    msg['To'] = to
+
+    s = smtplib.SMTP('aspmx.l.google.com')
+    s.sendmail('noreply@naturalis.nl',[to],msg.as_string())
+    s.quit()

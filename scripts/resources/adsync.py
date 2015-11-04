@@ -27,6 +27,11 @@ except KeyError as e:
     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
     exit(1)
 
+try:
+    to_address = environ['KS_MAILTO']
+except KeyError as e:
+    print "ERROR: export of var KS_MAILTO should exist"
+    exit(1)
 
 domain = "NNM\\"
 c = ad.connect(host,domain+user,password)
@@ -54,7 +59,7 @@ def sync_users():
                     log.logger.info("don't do anything, user %s exists but not in ad sync group" % u['username'])
         else:
             log.logger.info("Trying to create user %s" % u['username'])
-            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id):
+            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id,to_adress):
                 log.logger.info("Succesfully to created user %s" % u['username'])
             else:
                 log.logger.error("Unable to create user %s" % u['username'])
