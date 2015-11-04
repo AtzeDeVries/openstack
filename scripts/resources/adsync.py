@@ -123,18 +123,18 @@ def sync_membership():
             for u in added:
                 log.logger.debug("Trying to add user %s to group %s" % (u,"adsync - %s" % i[12:]))
                 ####
-                # if ks.add_user_to_group(ksclient,"adsync - %s" % i[12:],u):
-                #     log.logger.info("Added user %s to group %s" % (u,"adsync - %s" % i[12:]))
-                # else:
-                #     log.logger.error("Adding user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
+                if ks.add_user_to_group(ksclient,"adsync - %s" % i[12:],u):
+                    log.logger.info("Added user %s to group %s" % (u,"adsync - %s" % i[12:]))
+                else:
+                    log.logger.error("Adding user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
                 ####
             for u in removed:
                 log.logger.debug("Trying to remove user %s from group %s" % (u,"adsync - %s" % i[12:]))
                 ####
-                # if ks.remove_user_from_group(ksclient,"adsync - %s" % i[12:],u):
-                #     log.logger.info("Removed user %s to group %s" % (u,"adsync - %s" % i[12:]))
-                # else:
-                #     log.logger.error("Removing user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
+                if ks.remove_user_from_group(ksclient,"adsync - %s" % i[12:],u):
+                    log.logger.info("Removed user %s to group %s" % (u,"adsync - %s" % i[12:]))
+                else:
+                    log.logger.error("Removing user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
                 ####
         else:
             log.logger.warning("Group %s does not available!" % i)
