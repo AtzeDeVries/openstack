@@ -45,7 +45,6 @@ ksclient = ks.connect(auth_url,ks_username,ks_password,project_name)
 
 def sync_users():
 
-    #all_users = ad.users_in_group(c,'Openstack - All Users')
     all_users = ad.openstack_users(c)
     ks_users = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=True)]
     ks_users_disabled = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=False)]
@@ -84,7 +83,6 @@ def sync_users():
         ####
 
 def sync_groups():
-    #ad_groups = ad.gather_ad_groups(c)
     ad_groups = []
     for g in ad.openstack_groups(c):
         ad_groups.append(str(g).replace('Openstack - ','adsync - '))
@@ -110,7 +108,6 @@ def sync_groups():
         ####
 def sync_membership():
 
-    #for i in ad.groups_in_group(c,'Openstack - All Users'):
     for i in ad.openstack_groups(c):
         log.logger.debug("Syncing group: adsync - %s" % i[12:])
         #users_ad = [ u['username'] for u in ad.users_in_group(c,i) ]

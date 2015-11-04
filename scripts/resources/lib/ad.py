@@ -19,43 +19,6 @@ def connect(host,u,p):
     return c
 
 
-def user_member_of(conn,dn):
-    """
-    Get all groups user in member of. Takes arguments
-    * connection object
-    * Full DN of user
-    Returns array of groups
-    """
-    groups = []
-    conn.search(attributes=['Name'],
-                search_base='dc=nnm,dc=local',
-                search_filter='(&(Name=Map*)(member:1.2.840.113556.1.4.1941:='+dn+'))')
-    for g in conn.entries:
-        groups.append(str(g['name']))
-    return groups
-
-def groups_in_group(conn,groupname):
-    """
-    Get all groups (also nested) in a group nested in the Openstack OU. Takes:
-    * connection object
-    * Groupname
-    Returns array of groups
-    """
-    groups = []
-    conn.search(attributes=['Name'],
-                search_base='dc=nnm,dc=local',
-                search_filter='(&(objectclass=group)(memberOf:1.2.840.113556.1.4.1941:=CN='+groupname+',OU=OpenStack,OU=Resources,OU=Groepen,DC=nnm,DC=local))')
-    for g in conn.entries:
-        if str(g['Name'])[:12] == 'Openstack - ':
-            groups.append(str(g['Name']))
-        else:
-            log.logger.warning("%s is not a good group name. Should start with 'Openstack - '" % g['Name'])
-
-
-
-    return groups
-
-
 def openstack_groups(conn):
     """
     Gets all groups which should be made in stack. Takes:
@@ -113,6 +76,45 @@ def openstack_users_in_group(conn,group):
     for u in conn.entries:
         users.append(str(u['mail']).split("@")[0].lower())
     return users
+
+
+##### All below probally depreciaded
+
+def user_member_of(conn,dn):
+    """
+    Get all groups user in member of. Takes arguments
+    * connection object
+    * Full DN of user
+    Returns array of groups
+    """
+    groups = []
+    conn.search(attributes=['Name'],
+                search_base='dc=nnm,dc=local',
+                search_filter='(&(Name=Map*)(member:1.2.840.113556.1.4.1941:='+dn+'))')
+    for g in conn.entries:
+        groups.append(str(g['name']))
+    return groups
+
+def groups_in_group(conn,groupname):
+    """
+    Get all groups (also nested) in a group nested in the Openstack OU. Takes:
+    * connection object
+    * Groupname
+    Returns array of groups
+    """
+    groups = []
+    conn.search(attributes=['Name'],
+                search_base='dc=nnm,dc=local',
+                search_filter='(&(objectclass=group)(memberOf:1.2.840.113556.1.4.1941:=CN='+groupname+',OU=OpenStack,OU=Resources,OU=Groepen,DC=nnm,DC=local))')
+    for g in conn.entries:
+        if str(g['Name'])[:12] == 'Openstack - ':
+            groups.append(str(g['Name']))
+        else:
+            log.logger.warning("%s is not a good group name. Should start with 'Openstack - '" % g['Name'])
+
+
+
+    return groups
 
 def gather_ad_groups(conn):
     """

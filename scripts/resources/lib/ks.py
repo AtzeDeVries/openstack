@@ -190,6 +190,13 @@ def remove_user_from_group(client,groupname,username):
         return False
 
 def sendaccountmail(to,username,password):
+    """
+    Send an email to a email adress which contains
+    the username and pass of the created user. Takes:
+    * email address to send to
+    * username
+    * password
+    """
     text = "An stack.naturalis.nl account has been created for:\n username: %s\n password: %s" % (username,password)
     msg = MIMEText(text)
     msg['Subject'] = 'stack.naturalis.nl account has been created for %s' % username
