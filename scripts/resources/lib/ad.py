@@ -46,7 +46,7 @@ def groups_in_group(conn,groupname):
                 search_base='dc=nnm,dc=local',
                 search_filter='(&(objectclass=group)(memberOf:1.2.840.113556.1.4.1941:=CN='+groupname+',OU=OpenStack,OU=Resources,OU=Groepen,DC=nnm,DC=local))')
     for g in conn.entries:
-        if not g[:12] == 'Openstack - ':
+        if not str(g['Name'][:12]) == 'Openstack - ':
             log.logger.warning("%s is not a good group name" % g)
             continue
         groups.append(str(g['Name']))
