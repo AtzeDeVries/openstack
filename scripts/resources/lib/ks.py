@@ -72,7 +72,7 @@ def generate_password(numbers=10):
     return ''.join(random.choice(chars) for i in range(numbers))
 
 
-def create_user(client,username,sync_group_id,to_adress):
+def create_user(client,username,sync_group_id,to_address):
     """
     Creates user in keystone. Takes:
     * keystone client object
