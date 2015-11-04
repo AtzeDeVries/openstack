@@ -49,7 +49,7 @@ def groups_in_group(conn,groupname):
         if str(g['Name'])[:12] == 'Openstack - ':
             groups.append(str(g['Name']))
         else:
-            log.logger.warning("%s is not a good group name. Should start with 'Openstack - '" % g)
+            log.logger.warning("%s is not a good group name. Should start with 'Openstack - '" % g['Name'])
 
 
 
