@@ -46,8 +46,8 @@ def groups_in_group(conn,groupname):
                 search_base='dc=nnm,dc=local',
                 search_filter='(&(objectclass=group)(memberOf:1.2.840.113556.1.4.1941:=CN='+groupname+',OU=OpenStack,OU=Resources,OU=Groepen,DC=nnm,DC=local))')
     for g in conn.entries:
-        if not str(g['Name'][:12]) == 'Openstack - ':
-            log.logger.warning("%s is not a good group name" % g)
+        if str(g['Name'][:12]) != 'Openstack - ':
+            log.logger.warning("%s is not a good group name. Should start with 'Openstac - '" % g)
             continue
         groups.append(str(g['Name']))
 
@@ -61,7 +61,7 @@ def gather_ad_groups(conn):
     """
     grp = []
     for g in  groups_in_group(conn,'Openstack - All users'):
-        if not g[:12] == 'Openstack - ':
+        if g[:12] != 'Openstack - ':
             log.logger.warning("%s is not a good group name" % g)
             continue
         grp.append('adsync - %s' % g[12:])
