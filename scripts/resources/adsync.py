@@ -59,7 +59,7 @@ def sync_users():
                     log.logger.info("don't do anything, user %s exists but not in ad sync group" % u['username'])
         else:
             log.logger.info("Trying to create user %s" % u['username'])
-            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id,to_adress):
+            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id,to_address):
                 log.logger.info("Succesfully to created user %s" % u['username'])
             else:
                 log.logger.error("Unable to create user %s" % u['username'])
