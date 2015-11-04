@@ -68,10 +68,10 @@ def sync_users():
 
 
 def sync_groups():
-
+    ad_groups = ad.gather_ad_groups(c)
     ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:9] == 'adsync - ']
-    ad_added_groups = [x for x in ad.gather_ad_groups(c) if x not in ks_group_list]
-    ad_removed_groups = [x for x in ks_group_list if x not in ad.gather_ad_groups(c)]
+    ad_added_groups = [x for x in ad_groups if x not in ks_group_list]
+    ad_removed_groups = [x for x in ks_group_list if x not in ad_groups]
 
     for g in ad_added_groups:
         log.logger.info("Trying to add group %s" % g)
