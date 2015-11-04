@@ -59,7 +59,7 @@ def gather_ad_groups(conn):
     grp = []
     for g in  groups_in_group(conn,'Openstack - All users'):
         if not g[:12] == 'Openstack - ':
-            log.logger.WARN("%s is not a good group name" % g)
+            log.logger.warning("%s is not a good group name" % g)
             continue
         grp.append('adsync - %s' % g[12:])
     return grp
