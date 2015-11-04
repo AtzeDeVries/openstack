@@ -69,7 +69,7 @@ def sync_users():
 
 def sync_groups():
 
-    ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:17] == 'Research Group - ']
+    ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:17] == 'adsync - ']
     ad_added_groups = [x for x in ad.gather_ad_groups(c) if x not in ks_group_list]
     ad_removed_groups = [x for x in ks_group_list if x not in ad.gather_ad_groups(c)]
 
@@ -90,24 +90,24 @@ def sync_groups():
 def sync_membership():
 
     for i in ad.groups_in_group(c,'Openstack - All Users'):
-        log.logger.debug("Syncing group: Research Group - %s" % i[12:])
+        log.logger.debug("Syncing group: adsync - %s" % i[12:])
         users_ad = [ u['username'] for u in ad.users_in_group(c,i) ]
-        if ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]):
-            users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"Research Group - %s" % i[12:]))]
+        if ks.get_id_ks_group(ksclient,"adsync - %s" % i[12:]):
+            users_ks = [u.name for u in ksclient.users.list(group=ks.get_id_ks_group(ksclient,"adsync - %s" % i[12:]))]
             added = [x for x in users_ad if x not in users_ks]
             removed = [x for x in users_ks if x not in users_ad]
 
             for u in added:
-                if ks.add_user_to_group(ksclient,"Research Group - %s" % i[12:],u):
-                    log.logger.info("Added user %s to group %s" % (u,"Research Group - %s" % i[12:]))
+                if ks.add_user_to_group(ksclient,"adsync - %s" % i[12:],u):
+                    log.logger.info("Added user %s to group %s" % (u,"adsync - %s" % i[12:]))
                 else:
-                    log.logger.error("Adding user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
+                    log.logger.error("Adding user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
 
             for u in removed:
-                if ks.remove_user_from_group(ksclient,"Research Group - %s" % i[12:],u):
-                    log.logger.info("Removed user %s to group %s" % (u,"Research Group - %s" % i[12:]))
+                if ks.remove_user_from_group(ksclient,"adsync - %s" % i[12:],u):
+                    log.logger.info("Removed user %s to group %s" % (u,"adsync - %s" % i[12:]))
                 else:
-                    log.logger.error("Removing user %s to group %s failed" % (u,"Research Group - %s" % i[12:]))
+                    log.logger.error("Removing user %s to group %s failed" % (u,"adsync - %s" % i[12:]))
         else:
             log.logger.warning("Group %s does not available!" % i)
 
