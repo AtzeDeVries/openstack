@@ -58,29 +58,29 @@ def sync_users():
                 if u['username'] in ks_users_disabled: # so user is in the list of disabled users and in the ad sync group
                     log.logger.debug("Trying to enable user %s" % u['username'])
                     ####
-                    #if ks.enable_user(ksclient,u['username']):
-                    #    log.logger.info("Succesfully enabled user %s" % u['username'])
-                    #else:
-                    #    log.logger.error("Unable to enable user %s" % u['username'])
+                    if ks.enable_user(ksclient,u['username']):
+                       log.logger.info("Succesfully enabled user %s" % u['username'])
+                    else:
+                       log.logger.error("Unable to enable user %s" % u['username'])
                     ####
                 else: # user is disabled but not in ad sync group
                     log.logger.info("don't do anything, user %s exists but not in ad sync group" % u['username'])
         else:
             log.logger.debug("Trying to create user %s" % u['username'])
             ####
-            # if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id,to_address):
-            #     log.logger.info("Succesfully to created user %s" % u['username'])
-            # else:
-            #     log.logger.error("Unable to create user %s" % u['username'])
+            if ks.create_user(ksclient,u['username'],ks_ad_group_sync_id,to_address):
+                log.logger.info("Succesfully to created user %s" % u['username'])
+            else:
+                log.logger.error("Unable to create user %s" % u['username'])
             ####
 
     for u in disabled_users:
         log.logger.debug("Trying to disable user: %s" % u)
         ####
-        # if ks.disable_user(ksclient,u):
-        #     log.logger.info("Succesfully disabled user %s" % u)
-        # else:
-        #     log.logger.error("Unable to disable user %s" % u)
+        if ks.disable_user(ksclient,u):
+            log.logger.info("Succesfully disabled user %s" % u)
+        else:
+            log.logger.error("Unable to disable user %s" % u)
         ####
 
 def sync_groups():
@@ -95,18 +95,18 @@ def sync_groups():
     for g in ad_added_groups:
         log.logger.debug("Trying to add group %s" % g)
         ####
-        # if ks.create_group(ksclient,g):
-        #     log.logger.info("Succesfully created group %s" % g)
-        # else:
-        #     log.logger.error("Unable to create group %s" % g)
+        if ks.create_group(ksclient,g):
+            log.logger.info("Succesfully created group %s" % g)
+        else:
+            log.logger.error("Unable to create group %s" % g)
         ####
     for g in ad_removed_groups:
         log.logger.debug("Trying to remove group %s" % g)
         ####
-        # if ks.delete_group(ksclient,g):
-        #     log.logger.info("Succesfully deleted group %s" % g)
-        # else:
-        #     log.logger.error("Unable to delete group %s" % g)
+        if ks.delete_group(ksclient,g):
+            log.logger.info("Succesfully deleted group %s" % g)
+        else:
+            log.logger.error("Unable to delete group %s" % g)
         ####
 def sync_membership():
 
