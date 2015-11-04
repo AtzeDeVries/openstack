@@ -69,7 +69,7 @@ def sync_users():
 
 def sync_groups():
 
-    ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:17] == 'adsync - ']
+    ks_group_list = [g.name for g in ksclient.groups.list() if g.name[:9] == 'adsync - ']
     ad_added_groups = [x for x in ad.gather_ad_groups(c) if x not in ks_group_list]
     ad_removed_groups = [x for x in ks_group_list if x not in ad.gather_ad_groups(c)]
 
