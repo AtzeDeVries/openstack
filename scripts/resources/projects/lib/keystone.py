@@ -82,15 +82,24 @@ class KeyStone:
                 access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
                 current_access.append(g.name)
             except:
-                log.logger.debug("Assuming that group '%s' has no access" % g.name)
+                log.logger.debug("Assuming that group '%s' has no access to '%s'" % (g.name,project_name))
         #print current_access
         #print current_denied
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
         removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
-        print "ADDED: %s" % added
-        print "REMOVED: %s" % removed
+        log.logger.debug("'%s' will be added to '%s'" % (added,project_name))
+        log.logger.debug("'%s' will be removed from '%s'" % (added,project_name))
 
+        for a in added:
+            grp_id = group_id = self.ksclient.groups.list(name=a)[0].id
+            log.logger.info("Granting access of %s to %s" % (r,project_name))
+            self.ksclient.roles.grant(self.member_role_id,group=grp_id,project=project_id)
+
+        for r in removed:
+            grp_id = group_id = self.ksclient.groups.list(name=a)[0].id
+            log.logger.info("Revoking access of %s to %s" % (r,project_name))
+            self.ksclient.roles.revoke(self.member_role_id,group=grp_id,project=project_id)
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
         #log.logger.debug("groupaccess: %s" % group_access)
         # current_access = self.ksclient.roles.list(group=group_id, project=project_id)
