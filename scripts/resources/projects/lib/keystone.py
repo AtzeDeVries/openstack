@@ -46,7 +46,7 @@ class KeyStone:
         log.logger.debug("New project created with id: %s" % new_project.id)
         log.logger.debug("Granting ADMIN access to SNB to project %s" % new_project.id)
 
-        self.ksclient.roles.grant(self.admin_role_id,group=group_id,project=new_project.id)
+        self.ksclient.roles.grant(admin_role_id,group=group_id,project=new_project.id)
         return new_project
 
     def update_access_to_project(self,project_name,group_name):
