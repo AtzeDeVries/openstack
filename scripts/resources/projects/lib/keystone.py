@@ -60,7 +60,7 @@ class KeyStone:
         group_id = self.ksclient.groups.list(name=group_name)[0].id
         project_id = self.ksclient.projects.list(name=project_name)
 
-        currrent_access = self.ksclient.roles.list(group=group_id,project=project_id)
+        currrent_access = self.ksclient.roles.list(project=project_id)
         for ca in currrent_access:
             print ca
     # def connect(auth_url,ks_username,ks_password,project_name):
