@@ -10,7 +10,7 @@ from lib import log
 
 try:
     auth_url = environ['KS_ENDPOINT_V3']
-    auth_url_v2 = environ['OS_AUTH_URL']
+    auth_url_v2 = environ['KS_ENDPOINT_V2']
     ks_username = environ['OS_USERNAME']
     ks_password = environ['OS_PASSWORD']
     project_name = environ['OS_PROJECT_NAME']

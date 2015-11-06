@@ -18,17 +18,17 @@ class Nova():
 
 
     def show(self,flavor):
-        print __get_flavor_access_list
+        print self.__get_flavor_access_list(flavor)
 
     def __get_flavor_access_list(self,flavor):
-        flid = __get_flavor_id(flavor)
+        flid = self.__get_flavor_id(flavor)
         if not flid:
             log.logger.warning("Flavor %s does not exist" % flavor)
         else:
-            return self.nova.flavor.flavor_access(__get_flavor_id(flid))
+            return self.nova.flavors.flavor_access(__get_flavor_id(flid))
 
     def __get_flavor_id(self,flavor):
-        all_flavors = nova.flavor.list()
+        all_flavors = self.nova.flavors.list()
         exists = False
         for f in all_flavors:
             if f.name == flavor:
