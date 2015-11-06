@@ -21,7 +21,7 @@ class KeyStone:
 
         sess = session.Session(auth=auth)
         self.ksclient = client.Client(session=sess)
-        self.member_role_id = ksclient.roles.list(name='_member_')[0].id
+        self.member_role_id = self.ksclient.roles.list(name='_member_')[0].id
 
     def user_enabled(self,username):
         """
