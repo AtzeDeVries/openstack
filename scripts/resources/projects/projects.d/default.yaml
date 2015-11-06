@@ -1,0 +1,27 @@
+project:
+  # Names
+  name: name a
+  groups:
+    - group a
+  # Compute
+  cpu: 24
+  ram: 24
+  instances: 50
+  storage: 512
+  # Network
+  networks: 4
+  subnets: 4
+  routers: 4
+  ports: 50
+  floatingips: 5
+  securitygroups: 10
+  securityrules: 10
+  # Volumes
+  volumes: 10
+  volumesnapshots: 10
+  # Flavors
+  flavors:
+    - hpc.2c.2r.10h
+    - hpc.2c.4r.10h
+    - hpc.4c.2r.10h
+    - hpc.4c.4r.10h
