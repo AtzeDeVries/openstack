@@ -58,19 +58,20 @@ class KeyStone:
         : param str project_name: name of the project
         : param array group_name: array of the groups which should have access
         """
+        # implementation of check access in roles.py is very strange. If user has
+        # no acccess it throws an error instead of false...
 
         excludes = ['SNB']
         #group_id = self.ksclient.groups.list(name=group_name)[0].id
         group_access = {}
         project_id = self.ksclient.projects.list(name=project_name)[0].id
         for g in self.grouplist:
-            print g.name
-            print g.id
-            print self.member_role_id
-            print project_id
+            try:
+                access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)}
+                group_access.update({g.name: True})
+            else:
+                group_access.update({g.name: False})
 
-            print self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
-            print '----'
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
         log.logger.debug("groupaccess: %s" % group_access)
         # currrent_access = self.ksclient.roles.list(group=group_id, project=project_id)
