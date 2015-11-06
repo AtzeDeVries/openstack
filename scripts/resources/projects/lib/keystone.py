@@ -22,7 +22,7 @@ class KeyStone:
         sess = session.Session(auth=auth)
         self.ksclient = client.Client(session=sess)
 
-    def user_enabled(username):
+    def user_enabled(self,username):
         """
         Checks if user is enabled. Takes:
         * username
@@ -59,15 +59,7 @@ class KeyStone:
     #     """
     #     return len(client.users.list(name=username)) != 0
     #
-    # def user_enabled(client,username):
-    #     """
-    #     Checks if user is enabled. Takes:
-    #     * keystone client object
-    #     * username
-    #     Returns bool
-    #     """
-    #     return client.users.list(name=username)[0].enabled
-    #
+
     #
     #
     # def get_id_ks_group(client,grp):
