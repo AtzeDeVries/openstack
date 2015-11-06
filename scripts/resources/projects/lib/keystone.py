@@ -36,8 +36,9 @@ class KeyStone:
         Creates a project
         : param str name: project name
         """
-        role_id = self.ksclient.roles.get('_member_')
-        log.logger.debug("Role ID of _member_ is: %s" % role_id)
+        role_id = self.ksclient.roles.list()
+        for rid in role_id:
+            log.logger.debug("Role ID of _member_ is: %s" % rid)
 
         group_id = self.ksclient.groups.list(name=groupname)[0].id
         log.logger.debug("Group ID of %s is: %s" % (groupname,group_id))
