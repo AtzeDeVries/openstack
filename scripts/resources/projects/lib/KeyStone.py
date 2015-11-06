@@ -10,7 +10,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-class Ks:
+class KeyStone:
     def __init__(self,auth_url,ks_username,ks_password,project_name):
         auth = v3.Password(auth_url=auth_url,
                            username=ks_username,

@@ -13,6 +13,6 @@ except KeyError as e:
     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
     exit(1)
 
-keystone = Ks(auth_url,ks_username,ks_password,project_name)
+keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
 
 print keystone.user_enabled('rutger.vos')
