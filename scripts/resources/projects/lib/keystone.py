@@ -67,7 +67,7 @@ class KeyStone:
         project_id = self.ksclient.projects.list(name=project_name)[0].id
         for g in self.grouplist:
             try:
-                access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id})
+                access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
                 group_access.update({g.name: True})
             else:
                 group_access.update({g.name: False})
