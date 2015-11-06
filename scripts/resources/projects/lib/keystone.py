@@ -64,6 +64,11 @@ class KeyStone:
         group_access = {}
         project_id = self.ksclient.projects.list(name=project_name)
         for g in self.grouplist:
+            print g.name
+            print g.id
+            print self._member_role_id
+            print project_id
+            print '----'
             group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
         log.logger.debug("groupaccess: %s" % group_access)
         # currrent_access = self.ksclient.roles.list(group=group_id, project=project_id)
