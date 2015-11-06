@@ -82,9 +82,9 @@ class KeyStone:
                 access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
                 current_access.append(g.name)
             except:
-                current_denied.append(g.name)
-        print current_access
-        print current_denied
+                log.logger.debug("Assuming that group '%s' has no access" % g.name)
+        #print current_access
+        #print current_denied
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
         removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
