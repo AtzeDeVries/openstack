@@ -83,7 +83,7 @@ class KeyStone:
                 current_access.append(g.name)
             except:
                 current_denied.append(g.name)
-        print currrent_access
+        print current_access
         print current_denied
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
         removed = [ r for r in group_names if (r not in current_denied and r not in excludes) ]
@@ -93,8 +93,8 @@ class KeyStone:
 
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
         #log.logger.debug("groupaccess: %s" % group_access)
-        # currrent_access = self.ksclient.roles.list(group=group_id, project=project_id)
-        # for ca in currrent_access:
+        # current_access = self.ksclient.roles.list(group=group_id, project=project_id)
+        # for ca in current_access:
         #     print ca
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
