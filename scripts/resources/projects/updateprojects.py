@@ -4,6 +4,7 @@ import yaml
 from os import environ, listdir
 from os.path import isfile,join
 from lib.keystone import KeyStone
+from lib.nova import Nova
 from glob import glob
 from lib import log
 

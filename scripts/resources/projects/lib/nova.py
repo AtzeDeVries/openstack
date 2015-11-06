@@ -13,7 +13,7 @@ class Nova():
                            username=username,
                            password=password,
                            tenant_name=tenant_name)
-        sess = session.Sesson(auth=auth)
+        sess = session.Session(auth=auth)
         self.nova = client.Client("2",session=sess)
 
 
