@@ -86,7 +86,7 @@ class KeyStone:
         print current_access
         print current_denied
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
-        removed = [ r for r in current_access if (r not in group_name and r not in excludes) ]
+        removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
         print "ADDED: %s" % added
         print "REMOVED: %s" % removed
