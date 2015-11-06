@@ -13,19 +13,21 @@ class Nova():
                            username=username,
                            password=password,
                            tenant_name=tenant_name)
-        sess = session.Session(auth=auth)
+        sess = session.Session(auth=auth,verify='')
         self.nova = client.Client("2",session=sess)
 
 
     def show(self,flavor):
         print self.__get_flavor_access_list(flavor)
 
+
+
     def __get_flavor_access_list(self,flavor):
         flid = self.__get_flavor_id(flavor)
         if not flid:
             log.logger.warning("Flavor %s does not exist" % flavor)
         else:
-            return self.nova.flavors.flavor_access(__get_flavor_id(flid))
+            return self.nova.flavor_access._list_by_flavor(flid)
 
     def __get_flavor_id(self,flavor):
         all_flavors = self.nova.flavors.list()
