@@ -69,7 +69,7 @@ class KeyStone:
             try:
                 access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
                 group_access.update({g.name: True})
-            else:
+            except:
                 group_access.update({g.name: False})
 
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
