@@ -21,6 +21,7 @@ class KeyStone:
 
         sess = session.Session(auth=auth)
         self.ksclient = client.Client(session=sess)
+        self.member_role_id = ksclient.roles.list(name='_member_')[0].id
 
     def user_enabled(self,username):
         """
@@ -31,20 +32,37 @@ class KeyStone:
         return self.ksclient.users.list(name=username)[0].enabled
 
 
-    def create_project(self,projectname,groupname):
+    def create_project(self,projectname):
         """
         Creates a project
         : param str name: project name
         """
-        role_id = self.ksclient.roles.list()
-        for rid in role_id:
-            log.logger.debug("Role ID of _member_ is: %s" % rid)
 
-        group_id = self.ksclient.groups.list(name=groupname)[0].id
-        log.logger.debug("Group ID of %s is: %s" % (groupname,group_id))
-        #self.ksclient.projects.create(name = projectname,
-        #                              domain = 'Default')
+        group_id = self.ksclient.groups.list(name='SNB')[0].id
+        admin_role_id = self.ksclient.roles.list(name='admin')[0].id
 
+        new_project = self.ksclient.projects.create(name = projectname,
+                                                    domain = 'Default')
+        log.logger.debug("New project created with id: %s" % new_project.id)
+        log.logger.debug("Granting ADMIN access to SNB to project %s" % new_project.id)
+
+        self.ksclient.roles.grant(self.admin_role_id,group=group_id,project=new_project.id)
+        return new_project
+
+    def update_access_to_project(self,project_name,group_name):
+        """
+        Update access to project
+        : param str project_name: name of the project
+        : param array group_name: array of the groups which should have access
+        """
+
+        excludes = ['SNB']
+        group_id = self.ksclient.groups.list(name=group_name)[0].id
+        project_id = self.ksclient.projects.list(name=project_name)
+
+        currrent_access = self.ksclient.roles.list(group=group_id,project=project_id)
+        for ca in currrent_access:
+            print ca
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
     #     Generates a keystone client session object. Takes:
