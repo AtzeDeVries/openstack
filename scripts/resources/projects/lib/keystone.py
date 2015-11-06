@@ -31,13 +31,19 @@ class KeyStone:
         return self.ksclient.users.list(name=username)[0].enabled
 
 
-    def create_project(self,projectname):
+    def create_project(self,projectname,groupname):
         """
         Creates a project
         : param str name: project name
         """
-        self.ksclient.projects.create(name = projectname,
-                                      domain = 'Default')
+        role_id = self.ksclient.roles.get('_member_')
+        log.logger.debug("Role ID of _member_ is: %s" % role_id)
+
+        group_id = self.ksclient.groups.list(name=groupname)[0].id
+        log.logger.debug("Group ID of %s is: %s" % (groupname,group_id))
+        #self.ksclient.projects.create(name = projectname,
+        #                              domain = 'Default')
+
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
     #     Generates a keystone client session object. Takes:
