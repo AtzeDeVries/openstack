@@ -89,15 +89,15 @@ class KeyStone:
         removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
         log.logger.debug("'%s' will be added to '%s'" % (added,project_name))
-        log.logger.debug("'%s' will be removed from '%s'" % (added,project_name))
+        log.logger.debug("'%s' will be removed from '%s'" % (removed,project_name))
 
         for a in added:
-            grp_id = group_id = self.ksclient.groups.list(name=a)[0].id
-            log.logger.info("Granting access of %s to %s" % (r,project_name))
+            grp_id = self.ksclient.groups.list(name=a)[0].id
+            log.logger.info("Granting access of %s to %s" % (a,project_name))
             self.ksclient.roles.grant(self.member_role_id,group=grp_id,project=project_id)
 
         for r in removed:
-            grp_id = group_id = self.ksclient.groups.list(name=a)[0].id
+            grp_id = self.ksclient.groups.list(name=a)[0].id
             log.logger.info("Revoking access of %s to %s" % (r,project_name))
             self.ksclient.roles.revoke(self.member_role_id,group=grp_id,project=project_id)
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
