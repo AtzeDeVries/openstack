@@ -77,7 +77,7 @@ class KeyStone:
         # no acccess it throws an error instead of false...
         for g in self.grouplist:
             if g.name in excludes:
-                continue
+                next
             try:
                 access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
                 current_access.append(g.name)
