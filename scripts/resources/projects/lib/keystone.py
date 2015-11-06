@@ -84,8 +84,8 @@ class KeyStone:
             except:
                 current_denied.append(g.name)
 
-        added = [a for a in group_names if a not in current_access ]
-        removed = [ r for r in group_names if r not in current_denied ]
+        added = [a for a in group_names if (a not in current_access and a not excludes)]
+        removed = [ r for r in group_names if (r not in current_denied and r not in excludes) ]
 
         print "ADDED: %s" % added
         print "REMOVED: %s" % removed
