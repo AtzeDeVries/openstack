@@ -66,7 +66,7 @@ class KeyStone:
         for g in self.grouplist:
             print g.name
             print g.id
-            print self._member_role_id
+            print self.member_role_id
             print project_id
             print '----'
             group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
