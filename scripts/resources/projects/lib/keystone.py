@@ -52,28 +52,46 @@ class KeyStone:
         self.ksclient.roles.grant(admin_role_id,group=group_id,project=new_project.id)
         return new_project
 
-    def update_access_to_project(self,project_name,group_name):
+    def update_access_to_project(self,project_name,group_names):
         """
         Update access to project
         : param str project_name: name of the project
-        : param array group_name: array of the groups which should have access
+        : param array group_names: array of the groups which should have access
         """
+        excludes = ['SNB']
+        # check if gives groupnames excist
+        current_names = [ g.name for g in self.grouplist]
+        to_be_deleted = []
+        for gn in  group_names:
+            if gn not in current_names:
+                log.logger.warning("'%s' is not an excisting group" % gn)
+                to_be_deleted.append(gn)
+        # clean up list
+        for d in to_be_deleted:
+            group_names.remove(d)
+        #group_id = self.ksclient.groups.list(name=group_name)[0].id
+        current_access = []
+        current_denied = []
+        project_id = self.ksclient.projects.list(name=project_name)[0].id
         # implementation of check access in roles.py is very strange. If user has
         # no acccess it throws an error instead of false...
-
-        excludes = ['SNB']
-        #group_id = self.ksclient.groups.list(name=group_name)[0].id
-        group_access = {}
-        project_id = self.ksclient.projects.list(name=project_name)[0].id
         for g in self.grouplist:
+            if g.name in excludes:
+                continue
             try:
                 access = self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)
-                group_access.update({g.name: True})
+                current_access.append(g.name)
             except:
-                group_access.update({g.name: False})
+                current_denied.append(g.name)
+
+        added = [a for a in group_names if a not in currrent_access ]
+        removed = [ r for r in group_names if r not in current_denied ]
+
+        print "ADDED: %s" % added
+        print "REMOVED: %s" % removed
 
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
-        log.logger.debug("groupaccess: %s" % group_access)
+        #log.logger.debug("groupaccess: %s" % group_access)
         # currrent_access = self.ksclient.roles.list(group=group_id, project=project_id)
         # for ca in currrent_access:
         #     print ca
