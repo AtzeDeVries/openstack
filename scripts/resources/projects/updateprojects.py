@@ -34,5 +34,4 @@ for pf in project_files:
 
     # for flavor in data['project']['flavors']:
     #     print flavor
-keystone.projects.create(name = 'testproject',
-                        domain = 'Default')
+keystone.create_project('testproject')

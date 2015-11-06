@@ -30,6 +30,14 @@ class KeyStone:
         """
         return self.ksclient.users.list(name=username)[0].enabled
 
+
+    def create_project(self,projectname):
+        """
+        Creates a project
+        : param str name: project name
+        """
+        self.ksclient.projects.create(name = projectname,
+                                      domain = 'Default')
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
     #     Generates a keystone client session object. Takes:
