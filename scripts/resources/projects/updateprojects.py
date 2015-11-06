@@ -34,5 +34,5 @@ for pf in project_files:
 
     # for flavor in data['project']['flavors']:
     #     print flavor
-keystone.create_project('testproject')
+#keystone.create_project('testproject')
 keystone.update_access_to_project('zooi','SNB')

@@ -23,6 +23,10 @@ class KeyStone:
         self.ksclient = client.Client(session=sess)
         self.member_role_id = self.ksclient.roles.list(name='_member_')[0].id
 
+        log.logger.debug("enumbering access for groups in projects")
+        self.grouplist = self.ksclient.groups.list()
+
+
     def user_enabled(self,username):
         """
         Checks if user is enabled. Takes:
@@ -41,8 +45,7 @@ class KeyStone:
         group_id = self.ksclient.groups.list(name='SNB')[0].id
         admin_role_id = self.ksclient.roles.list(name='admin')[0].id
 
-        new_project = self.ksclient.projects.create(name = projectname,
-                                                    domain = 'Default')
+        new_project = self.ksclient.projects.create(name = projectname, domain = 'Default')
         log.logger.debug("New project created with id: %s" % new_project.id)
         log.logger.debug("Granting ADMIN access to SNB to project %s" % new_project.id)
 
@@ -57,12 +60,15 @@ class KeyStone:
         """
 
         excludes = ['SNB']
-        group_id = self.ksclient.groups.list(name=group_name)[0].id
+        #group_id = self.ksclient.groups.list(name=group_name)[0].id
+        group_access = {}
         project_id = self.ksclient.projects.list(name=project_name)
-
-        currrent_access = self.ksclient.roles.list(project=project_id)
-        for ca in currrent_access:
-            print ca
+        for g in self.grouplist:
+            group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
+        log.logger.debug("groupaccess: %s" % group_access)
+        # currrent_access = self.ksclient.roles.list(group=group_id, project=project_id)
+        # for ca in currrent_access:
+        #     print ca
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
     #     Generates a keystone client session object. Takes:
