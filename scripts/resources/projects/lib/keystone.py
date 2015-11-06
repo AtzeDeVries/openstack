@@ -97,7 +97,7 @@ class KeyStone:
             self.ksclient.roles.grant(self.member_role_id,group=grp_id,project=project_id)
 
         for r in removed:
-            grp_id = self.ksclient.groups.list(name=a)[0].id
+            grp_id = self.ksclient.groups.list(name=r)[0].id
             log.logger.info("Revoking access of %s to %s" % (r,project_name))
             self.ksclient.roles.revoke(self.member_role_id,group=grp_id,project=project_id)
             #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})

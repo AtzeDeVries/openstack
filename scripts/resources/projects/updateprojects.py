@@ -9,30 +9,43 @@ from lib import log
 
 try:
     auth_url = environ['KS_ENDPOINT_V3']
+    auth_url_v2 = environ['OS_AUTH_URL']
     ks_username = environ['OS_USERNAME']
     ks_password = environ['OS_PASSWORD']
     project_name = environ['OS_PROJECT_NAME']
 except KeyError as e:
     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
     exit(1)
-
-keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
-
-#print keystone.user_enabled('rutger.vos')
+#
+# keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
+#
+nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
 
 project_files = [ join('projects.d',f) for f in listdir('projects.d') if (isfile(join('projects.d',f)) and f[-5:] == '.yaml') ]
-#project_files = glob("projects.d/*.yaml")
+
+flavors_to_projects = {}
+
 for pf in project_files:
     log.logger.debug("Using filename: %s" % pf)
     with open(pf) as f:
         data = yaml.safe_load(f)['project']
         f.close()
     log.logger.debug("Create project name '%s'" % data['name'])
-    log.logger.debug("")
-    print [flavor for flavor in data['flavors']]
+
+    for fl in data['flavors']:
+        if flavors_to_projects.get(fl):
+            flavors_to_projects[fl].append(data['name'])
+        else:
+            flavors_to_projects[fl] = [data['name']]
+
+print flavors_to_projects
 
 
-    # for flavor in data['project']['flavors']:
-    #     print flavor
+for key,value in flavors_to_projects.iteritems():
+    print "Flavor %s has" % key
+    for pr in value:
+        print " - %s" % pr
+    print "Current access of %s" % key
+    print nova.show(key)
 #keystone.create_project('testproject')
-keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])
+#keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])
