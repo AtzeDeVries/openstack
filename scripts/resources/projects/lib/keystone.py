@@ -62,7 +62,7 @@ class KeyStone:
         excludes = ['SNB']
         #group_id = self.ksclient.groups.list(name=group_name)[0].id
         group_access = {}
-        project_id = self.ksclient.projects.list(name=project_name).id
+        project_id = self.ksclient.projects.list(name=project_name)[0].id
         for g in self.grouplist:
             print g.name
             print g.id
