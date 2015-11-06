@@ -2,7 +2,7 @@
 
 
 from os import environ
-from lib import Ks
+from lib import KeyStone
 
 try:
     auth_url = environ['KS_ENDPOINT_V3']
