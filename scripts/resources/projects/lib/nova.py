@@ -23,7 +23,7 @@ class Nova():
     def __get_flavor_access_list(self,flavor):
         flid = self.__get_flavor_id(flavor)
         if not flid:
-            log.logger.warning("Flavor %s does not exist" % flavor)
+            raise NameError("Flavor %s does not exist" % flavor)
         else:
             return self.nova.flavor_access._list_by_flavor(flid)
 
