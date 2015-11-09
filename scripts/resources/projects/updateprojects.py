@@ -45,16 +45,21 @@ for key,value in flavors_to_projects.iteritems():
     #print "\nFlavor %s has" % key
     # users that should have = value
     # current is
-    current = []
-    if nova.show(key) is not None:
-        for c in nova.show(key):
-            current.append(keystone.project_id_to_name(c.tenant_id))
+    try:
+        current = []
+        if nova.show(key) is not None:
+            for c in nova.show(key):
+                current.append(keystone.project_id_to_name(c.tenant_id))
 
-    added = [a for a in value if a not in current]
-    removed = [ r for r in current if r not in value]
+        added = [a for a in value if a not in current]
+        removed = [ r for r in current if r not in value]
 
-    print "Added: %s" % added
-    print "Removed: %s" % removed
+        print "Added: %s" % added
+        print "Removed: %s" % removed
+    except NameError as e:
+        log.logger.warning("Flavor with name %s does not excist" % key)
+        log.logger.debug(e)
+    
     #
     # for pr in value:
     #     print " - %s" % pr
