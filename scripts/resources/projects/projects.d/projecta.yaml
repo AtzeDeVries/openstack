@@ -5,21 +5,24 @@ project:
     - Rely
     - KA
   # Compute
-  cpu: 12
-  ram: 24
-  instances: 40
-  storage: 1024
+  quotas:
+    nova:
+      cores: 24
+      floating_ips: 5
+      instances: 50
+      ram: 51200
+  storage: 512
   # Network
-  networks: 3
-  subnets: 5
-  routers: 6
-  ports: 30
-  floatingips: 4
-  securitygroups: 11
-  securityrules: 12
+  networks: 4
+  subnets: 4
+  routers: 4
+  ports: 50
+  floatingips: 5
+  securitygroups: 10
+  securityrules: 10
   # Volumes
-  volumes: 14
-  volumesnapshots: 18
+  volumes: 10
+  volumesnapshots: 10
   # Flavors
   flavors:
     - hpc.2c.2r.10h

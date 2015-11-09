@@ -29,7 +29,35 @@ class Nova():
             log.logger.debug(e)
             return False
 
-    def list_quota(self,project_id):
+
+    def update_quota(self,project_id,items):
+        print __quota_compare(project_id,items)
+        # current = self.__list_quota(project_id)
+        # new = {}
+        # if items['cpu'] != current.cores:
+        #     new.update({'cores': items['cpu']})
+        # if items['ram'] != current.ram:
+        #     new.update({'ram': items['ram']})
+        # if items['floatingips'] != current.floating_ips:
+        #     new.update({'floating_ips' : items['floating_ips']})
+        # if items['instances'] != current.instances:
+        #     new.update({'instances': items['instances']})
+        # if items['securitygroups'] != current.security_groups:
+
+#< instances=100, key_pairs=10, metadata_items=1024, ram=51200, security_group_rules=20, security_groups=10, server_group_members=10, server_groups=10>
+
+    def __quota_compare(self,project_id,items):
+        current = self.__list_quota(project_id)
+        new = {}
+        for key,value in items.iteritems():
+            try:
+                if value != getattr(current,value):
+                    new.update({key: value})
+            except Exception as e:
+                log.waring("Could not parse quota of project %s with quota setting %s" % (project_id,key))
+        return new
+
+    def __list_quota(self,project_id):
         return self.nova.quotas.get(project_id)
 
     def revoke_to_flavor(self,flavorname,projectid):

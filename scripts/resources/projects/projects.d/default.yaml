@@ -3,10 +3,13 @@ project:
   name: name a
   groups:
     - Rely
-  # Compute
-  cpu: 24
-  ram: 24
-  instances: 50
+  # quotas
+  quotas:
+    nova:
+      cores: 24
+      floating_ips: 5
+      instances: 50
+      ram: 51200
   storage: 512
   # Network
   networks: 4

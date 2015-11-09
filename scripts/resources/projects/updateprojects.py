@@ -39,8 +39,9 @@ for pf in project_files:
     keystone.update_access_to_project(data['name'], data['groups'])
 
     log.logger.debug("listing quota's")
-    print keystone.list_quota(keystone.project_name_to_id(data['name']))
-
+    #print nova.list_quota(keystone.project_name_to_id(data['name']))
+    print nova.update_quota(keystone.project_name_to_id(data['name']), 
+                            data['quotas']['nova'])
     for fl in data['flavors']:
         if flavors_to_projects.get(fl):
             flavors_to_projects[fl].append(data['name'])
