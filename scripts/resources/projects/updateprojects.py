@@ -18,7 +18,7 @@ except KeyError as e:
     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
     exit(1)
 #
-# keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
+keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
 #
 nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
 
@@ -43,13 +43,13 @@ print flavors_to_projects
 
 
 for key,value in flavors_to_projects.iteritems():
-    print "Flavor %s has" % key
+    print "\nFlavor %s has" % key
     for pr in value:
         print " - %s" % pr
     print "Current access of %s" % key
     access = nova.show(key)
     if access is not None:
-        print access[0].tenantid
+        print "acces with id: %s which is groupname: %s" % (access[0].tenant_id,keystone.project_id_to_name(acces[0].tenant_id))
 
 #keystone.create_project('testproject')
 #keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])
