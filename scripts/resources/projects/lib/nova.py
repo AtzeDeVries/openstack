@@ -29,6 +29,9 @@ class Nova():
             log.logger.debug(e)
             return False
 
+    def list_quota(self,project_id):
+        return self.nova.quotas.get(project_id)
+
     def revoke_to_flavor(self,flavorname,projectid):
         try:
             flid = self.__get_flavor_id(flavorname)

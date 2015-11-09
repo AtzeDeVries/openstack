@@ -88,8 +88,8 @@ class KeyStone:
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
         removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
-        log.logger.debug("'%s' will be added to '%s'" % (added,project_name))
-        log.logger.debug("'%s' will be removed from '%s'" % (removed,project_name))
+        log.logger.debug("'%s' will be added to project: '%s'" % (added,project_name))
+        log.logger.debug("'%s' will be removed from project: '%s'" % (removed,project_name))
 
         for a in added:
             grp_id = self.ksclient.groups.list(name=a)[0].id

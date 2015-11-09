@@ -38,6 +38,9 @@ for pf in project_files:
 
     keystone.update_access_to_project(data['name'], data['groups'])
 
+    log.logger.debug("listing quota's")
+    print keystone.list_quota(keystone.project_name_to_id(data['name']))
+
     for fl in data['flavors']:
         if flavors_to_projects.get(fl):
             flavors_to_projects[fl].append(data['name'])
@@ -60,13 +63,13 @@ for key,value in flavors_to_projects.iteritems():
         added = [a for a in value if a not in current]
         removed = [ r for r in current if (r not in value and r not in excludes)]
 
-        print "Added: %s" % added
+        #print "Added: %s" % added
         for to_add in added:
             if nova.grant_to_flavor(key, keystone.project_name_to_id(to_add)):
                 log.logger.info("Added %s to have access to %s" % (to_add, key))
             else:
                 log.logger.warning("Failed to add %s to have acccess to %s" % (to_add, key))
-        print "Removed: %s" % removed
+        #print "Removed: %s" % removed
         for to_remove in removed:
             if nova.revoke_to_flavor(key, keystone.project_name_to_id(to_remove)):
                 log.logger.info("Removed %s to have access to %s" % (to_remove, key))
