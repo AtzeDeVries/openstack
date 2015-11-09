@@ -46,8 +46,9 @@ for key,value in flavors_to_projects.iteritems():
     # users that should have = value
     # current is
     current = []
-    for c in nova.show(key):
-        current.append(keystone.project_id_to_name(access[0].tenant_id))
+    if nova.show(key) is not None:
+        for c in nova.show(key):
+            current.append(keystone.project_id_to_name(access[0].tenant_id))
 
     added = [a for a in value if a not in current]
     removed = [ r for r in current if r not in value]
