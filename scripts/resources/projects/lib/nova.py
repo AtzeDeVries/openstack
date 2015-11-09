@@ -13,7 +13,7 @@ class Nova():
                            username=username,
                            password=password,
                            tenant_name=tenant_name)
-        sess = session.Session(auth=auth,verify='')
+        sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
         self.nova = client.Client("2",session=sess)
 
 
