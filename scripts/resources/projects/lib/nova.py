@@ -36,7 +36,6 @@ class Nova():
                 break
         return exists
 
-    def __group_id_to_name(self,flavorid):
 
 
 
