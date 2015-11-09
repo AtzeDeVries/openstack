@@ -22,7 +22,7 @@ class Nova():
 
     def grant_to_flavor(self,flavorname,projectid):
         try:
-            flid = self.__get_flavor_id(flavor)
+            flid = self.__get_flavor_id(flavorname)
             self.nova.flavor_access.add_tenant_access(flid,projectid)
             return True
         except Exception as e:
@@ -31,7 +31,7 @@ class Nova():
 
     def revoke_to_flavor(self,flavorname,projectid):
         try:
-            flid = self.__get_flavor_id(flavor)
+            flid = self.__get_flavor_id(flavorname)
             self.nova.flavor_access.remove_tenant_access(flid,projectid)
             return True
         except Exception as e:
