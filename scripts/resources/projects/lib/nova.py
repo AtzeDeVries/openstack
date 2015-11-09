@@ -31,7 +31,7 @@ class Nova():
 
 
     def update_quota(self,project_id,items):
-        print __quota_compare(project_id,items)
+        return self.__quota_compare(project_id,items)
         # current = self.__list_quota(project_id)
         # new = {}
         # if items['cpu'] != current.cores:
@@ -51,10 +51,10 @@ class Nova():
         new = {}
         for key,value in items.iteritems():
             try:
-                if value != getattr(current,value):
+                if value != getattr(current,key):
                     new.update({key: value})
             except Exception as e:
-                log.waring("Could not parse quota of project %s with quota setting %s" % (project_id,key))
+                log.logger.warning("Could not parse quota of project %s with quota setting %s" % (project_id,key))
         return new
 
     def __list_quota(self,project_id):
