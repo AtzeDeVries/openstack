@@ -39,17 +39,28 @@ for pf in project_files:
         else:
             flavors_to_projects[fl] = [data['name']]
 
-print flavors_to_projects
 
 
 for key,value in flavors_to_projects.iteritems():
-    print "\nFlavor %s has" % key
-    for pr in value:
-        print " - %s" % pr
-    print "Current access of %s" % key
-    access = nova.show(key)
-    if access is not None:
-        print "acces with id: %s which is groupname: %s" % (access[0].tenant_id,keystone.project_id_to_name(acces[0].tenant_id))
+    #print "\nFlavor %s has" % key
+    # users that should have = value
+    # current is
+    current = []
+    for c in nova.show(key):
+        current.append(keystone.project_id_to_name(access[0].tenant_id))
+
+    added = [a for a in value if a not in current]
+    removed = [ r for r in current if r not in value]
+
+    print "Added: %s" % added
+    print "Removed: %s" % removed
+    #
+    # for pr in value:
+    #     print " - %s" % pr
+    # print "Current access of %s" % key
+    # access = nova.show(key)
+    # if access is not None:
+    #     print "acces with id: %s which is groupname: %s" % (access[0].tenant_id,keystone.project_id_to_name(access[0].tenant_id))
 
 #keystone.create_project('testproject')
 #keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])
