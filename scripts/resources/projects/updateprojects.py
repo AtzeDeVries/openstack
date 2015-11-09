@@ -31,8 +31,10 @@ for pf in project_files:
     with open(pf) as f:
         data = yaml.safe_load(f)['project']
         f.close()
-    log.logger.debug("Create project name '%s'" % data['name'])
-    keystone.create_project(data['name'])
+
+    if not keystone.check_if_project_excists(data['name']):
+        log.logger.debug("Create project name '%s'" % data['name'])
+        keystone.create_project(data['name'])
 
     keystone.update_access_to_project(data['name'], data['groups'])
 

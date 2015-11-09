@@ -105,6 +105,9 @@ class KeyStone:
         # current_access = self.ksclient.roles.list(group=group_id, project=project_id)
         # for ca in current_access:
         #     print ca
+    def check_if_project_excists(self,project_name):
+        return len(self.ksclient.projects.list(name=project_name)) > 0
+
     def project_id_to_name(self,projectid):
         return self.ksclient.projects.get(projectid).name
 
