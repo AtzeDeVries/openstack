@@ -47,6 +47,9 @@ for key,value in flavors_to_projects.iteritems():
     for pr in value:
         print " - %s" % pr
     print "Current access of %s" % key
-    nova.show(key)
+    access = nova.show(key)
+    if access is not None:
+        print access[0].tenantid
+
 #keystone.create_project('testproject')
 #keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])

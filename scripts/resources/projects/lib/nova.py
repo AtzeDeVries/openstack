@@ -18,12 +18,7 @@ class Nova():
 
 
     def show(self,flavor):
-        result = self.__get_flavor_access_list(flavor)
-        if result is None:
-            print "There is no access to flavor"
-        else:
-            print self.__get_flavor_access_list(flavor)
-
+        return self.__get_flavor_access_list(flavor)
 
     def __get_flavor_access_list(self,flavor):
         flid = self.__get_flavor_id(flavor)
@@ -40,6 +35,8 @@ class Nova():
                 exists = f.id
                 break
         return exists
+
+    def __group_id_to_name(self,flavorid):
 
 
 
