@@ -32,6 +32,9 @@ for pf in project_files:
         data = yaml.safe_load(f)['project']
         f.close()
     log.logger.debug("Create project name '%s'" % data['name'])
+    keystone.create_project(data['name'])
+
+    keystone.update_access_to_project(data['name'], data['groups'])
 
     for fl in data['flavors']:
         if flavors_to_projects.get(fl):
@@ -45,21 +48,34 @@ for key,value in flavors_to_projects.iteritems():
     #print "\nFlavor %s has" % key
     # users that should have = value
     # current is
+    excludes = ['SNB','admin']
     try:
         current = []
-        if nova.show(key) is not None:
-            for c in nova.show(key):
+        if nova.flavor_access(key) is not None:
+            for c in nova.flavor_access(key):
                 current.append(keystone.project_id_to_name(c.tenant_id))
 
         added = [a for a in value if a not in current]
-        removed = [ r for r in current if r not in value]
+        removed = [ r for r in current if (r not in value and r not in excludes)]
 
         print "Added: %s" % added
+        for to_add in added:
+            if nova.grant_to_flavor(key, keystone.project_name_to_id(to_add)):
+                log.logger.info("Added %s to have access to %s" % (to_add, key))
+            else:
+                log.logger.warning("Failed to add %s to have acccess to %s" % (to_add, key))
         print "Removed: %s" % removed
+        for to_remove in removed:
+            if nova.revoke_to_flavor(key, keystone.project_name_to_id(to_remove)):
+                log.logger.info("Removed %s to have access to %s" % (to_remove, key))
+            else:
+                log.logger.warning("Failed to remove %s to have acccess to %s" % (to_add, key))
     except NameError as e:
         log.logger.warning("Flavor with name %s does not excist" % key)
         log.logger.debug(e)
-    
+
+
+
     #
     # for pr in value:
     #     print " - %s" % pr

@@ -105,8 +105,11 @@ class KeyStone:
         # current_access = self.ksclient.roles.list(group=group_id, project=project_id)
         # for ca in current_access:
         #     print ca
-    def project_id_to_name(self,flavorid):
-        return self.ksclient.projects.get(flavorid).name
+    def project_id_to_name(self,projectid):
+        return self.ksclient.projects.get(projectid).name
+
+    def project_name_to_id(self,projectname):
+        return self.ksclient.projects.list(name=projectname)[0].id
     # def connect(auth_url,ks_username,ks_password,project_name):
     #     """
     #     Generates a keystone client session object. Takes:

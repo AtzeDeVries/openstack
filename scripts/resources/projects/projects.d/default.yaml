@@ -2,7 +2,7 @@ project:
   # Names
   name: name a
   groups:
-    - group a
+    - Rely
   # Compute
   cpu: 24
   ram: 24

@@ -17,8 +17,26 @@ class Nova():
         self.nova = client.Client("2",session=sess)
 
 
-    def show(self,flavor):
+    def flavor_access(self,flavor):
         return self.__get_flavor_access_list(flavor)
+
+    def grant_to_flavor(self,flavorname,projectid):
+        try:
+            flid = self.__get_flavor_id(flavor)
+            self.nova.flavor_access.add_tenant_access(flid,projectid)
+            return True
+        except Exception as e:
+            log.logger.debug(e)
+            return False
+
+    def revoke_to_flavor(self,flavorname,projectid):
+        try:
+            flid = self.__get_flavor_id(flavor)
+            self.nova.flavor_access.remove_tenant_access(flid,projectid)
+            return True
+        except Exception as e:
+            log.logger.debug(e)
+            return False
 
     def __get_flavor_access_list(self,flavor):
         flid = self.__get_flavor_id(flavor)

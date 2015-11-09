@@ -2,8 +2,8 @@ project:
   # Names
   name: name b
   groups:
-    - group b
-    - group c
+    - Rely
+    - KA
   # Compute
   cpu: 12
   ram: 24
