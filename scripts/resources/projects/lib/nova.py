@@ -31,7 +31,15 @@ class Nova():
 
 
     def update_quota(self,project_id,items):
-        return self.__quota_compare(project_id,items)
+        new_quota = self.__quota_compare(project_id,items)
+        try:
+            log.logger.info("updating project_id: %s with quota: %s" % (project_id,new_quota))
+            self.nova.quotas.update(project_id,new_quota)
+            return True
+        except Exception as e:
+            log.logger.warning("updating project_id: %s FAILED with quota: %s" % (project_id,new_quota))
+            return False
+
         # current = self.__list_quota(project_id)
         # new = {}
         # if items['cpu'] != current.cores:
