@@ -18,8 +18,11 @@ class Nova():
 
 
     def show(self,flavor):
-        print self.__get_flavor_access_list(flavor)
-
+        result = self.__get_flavor_access_list(flavor)
+        if result is None:
+            print "There is no access to flavor"
+        else:
+            print self.__get_flavor_access_list(flavor)
 
 
     def __get_flavor_access_list(self,flavor):
