@@ -27,10 +27,6 @@ nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
 cinder = Cinder(auth_url_v2,ks_username,ks_password,project_name)
 neutron = Neutron(auth_url_v2,ks_username,ks_password,project_name)
 
-
-neutron.list()
-exit(1)
-
 project_files = [ join('projects.d',f) for f in listdir('projects.d') if (isfile(join('projects.d',f)) and f[-5:] == '.yaml') ]
 
 flavors_to_projects = {}
@@ -55,6 +51,8 @@ for pf in project_files:
         log.logger.info("No need to update quota of %s" % data['name'])
     else:
         log.logger.warning("Failed to update quota for %s" % data['name'])
+
+    neutron.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['neutron'])
 
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:

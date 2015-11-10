@@ -17,8 +17,25 @@ class Neutron():
                                      tenant_name=tenant_name,auth_url=auth_url,
                                      ca_cert='./stack_naturalis_nl.ca-bundle')
 
-    def list(self):
-        print self.neutron.list_quotas()
+
+    def update_quota(self,project_id,items):
+        new = self.__quota_compare(project_id,items)
+        print new
+
+    def __list_quota(self,project_id):
+        return self.neutron.show_quota(project_id)
+
+
+    def __quota_compare(self,project_id,items):
+        current = self.__list_quota(project_id)
+        new = {}
+        for key,value in items.iteritems():
+            try:
+                if value != getattr(current,key):
+                    new.update({key: value})
+            except Exception as e:
+                log.logger.warning("Could not parse quota of project %s with quota setting %s" % (project_id,key))
+        return new
 
     # def flavor_access(self,flavor):
     #     return self.__get_flavor_access_list(flavor)
