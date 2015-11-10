@@ -39,10 +39,11 @@ class Neutron():
             return None
 
     def create_default_network(self,project_id):
-        state = [self.__router_exists(project_id), self.__network_exists(project_id) self.__subnet_exists(project_id)]
+        state = [self.__router_exists(project_id), self.__network_exists(project_id), self.__subnet_exists(project_id)]
         if not any(state):
             log.logger.debug("Creating a network for %s" % project_id)
-        
+            new_router = self.neutron.create_router(body={'router': {'tenant_id': project_id , 'admin_state_up': True ,'name' : 'router', 'distributed': True} })['router']['id']
+            print new_router
         else:
             log.logger.debug("No network creating neccecary for %s" % project_id)
 
