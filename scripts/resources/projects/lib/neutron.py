@@ -14,7 +14,8 @@ class Neutron():
         #                    tenant_name=tenant_name)
         # sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
         self.neutron = client.Client(username=username,password=password,
-                                     tenant_name=tenant_name,auth_url=auth_url)
+                                     tenant_name=tenant_name,auth_url=auth_url,
+                                     ca_cert='./stack_naturalis_nl.ca-bundle')
 
     def list(self):
         print self.neutron.list_quotas()
