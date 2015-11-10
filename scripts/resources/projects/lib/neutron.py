@@ -40,15 +40,15 @@ class Neutron():
 
     def __router_exists(self,project_id):
         _params = {'tenant_id' : project_id }
-        return len(self.neutron.list_routers(retrieve_all=True,**_params)['routers'] > 0)
+        return len(self.neutron.list_routers(retrieve_all=True,**_params)['routers']) > 0
 
     def __network_exists(self,project_id):
         _params = {'tenant_id' : project_id }
-        return len(self.neutron.list_networks(retrieve_all=True,**_params)['networks'] > 0)
+        return len(self.neutron.list_networks(retrieve_all=True,**_params)['networks']) > 0
 
     def __subnet_exists(self,project_id):
         _params = {'tenant_id' : project_id }
-        return len(self.neutron.list_subnets(retrieve_all=True,**_params)['subnets'] > 0)
+        return len(self.neutron.list_subnets(retrieve_all=True,**_params)['subnets']) > 0
 
     def __list_quota(self,project_id):
         return self.neutron.show_quota(project_id)['quota']
