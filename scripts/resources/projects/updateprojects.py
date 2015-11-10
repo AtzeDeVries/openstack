@@ -60,10 +60,10 @@ for pf in project_files:
     else:
         log.logger.warning("Failed to update Neutron quota for %s" % data['name'])
 
-    print '-------NETWORKTEST-----'
-    neutron.testy(keystone.project_name_to_id(data['name']))
+    # should be made a bit nicer
     neutron.create_default_network(keystone.project_name_to_id(data['name']))
-    print '---------------------'
+
+    cinder.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['cinder'])
 
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:
