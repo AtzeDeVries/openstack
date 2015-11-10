@@ -24,17 +24,16 @@ class Cinder():
     def __get_quota(self,project_id):
         return self.cinder.quotas.get(project_id)['quota_set']
 
-     def __quota_compare(self,project_id,items):
-         current = self.__get_quota(project_id)
-         new = {}
-         for key,value in items.iteritems():
-             try:
-                 if value != current[key]:
-                     new.update({key: value})
-             except Exception as e:
-                 log.logger.warning("Could not parse quota of project %s with quota setting %s" % (project_id,key))
-         return new
-
+    def __quota_compare(self,project_id,items):
+        current = self.__get_quota(project_id)
+        new = {}
+        for key,value in items.iteritems():
+            try:
+                if value != current[key]:
+                    new.update({key: value})
+            except Exception as e:
+                log.logger.warning("Could not parse quota of project %s with quota setting %s" % (project_id,key))
+        return new
 
 
     # def flavor_access(self,flavor):
