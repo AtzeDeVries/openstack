@@ -18,7 +18,7 @@ class Cinder():
     def list(self):
         print self.cinder.volumes.list()
 
-    def update_quota(self,project_id):
+    def update_quota(self,project_id,items):
         return self.__quota_compare(project_id,items)
 
     def __get_quota(self,project_id):
