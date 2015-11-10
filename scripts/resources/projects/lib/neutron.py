@@ -47,9 +47,11 @@ class Neutron():
             new_network = self.neutron.create_network(body={'network': {'tenant_id': project_id, 'name': 'network'}})['network']['id']
             new_subnet = self.neutron.create_subnet(body={'subnet':{'tenant_id':project_id,
                                                                     'name':'subnet',
+                                                                    'ip_version': 4,
                                                                     'network_id': new_network,
                                                                     'cidr': '172.16.1.0/24',
                                                                     'dns_nameservers':['8.8.8.8','8.8.4.4']}})['subnet']['id']
+
 
         else:
             log.logger.debug("No network creating neccecary for %s" % project_id)
