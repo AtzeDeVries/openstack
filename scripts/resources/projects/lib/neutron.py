@@ -19,7 +19,9 @@ class Neutron():
 
 
     def testy(self,project_id):
-        print self.__list_quota(project_id)
+        print self.__list_routers(project_id)
+        print self.__list_networks(project_id)
+        print self.__list_subnets(project_id)
 
     def update_quota(self,project_id,items):
         new = self.__quota_compare(project_id,items)
@@ -36,6 +38,17 @@ class Neutron():
             log.logger.debug("No need to update neutron quota of %s" % project_id)
             return None
 
+    def __router_exists(self,project_id):
+        _params = {'tenant_id' : project_id }
+        return len(self.neutron.list_routers(retrieve_all=False,**_params)['routers'] > 0)
+
+    def __network_exists(self,project_id):
+        _params = {'tenant_id' : project_id }
+        return len(self.neutron.list_networks(retrieve_all=False,**_params)['networks'] > 0)
+
+    def __subnet_exists(self,project_id):
+        _params = {'tenant_id' : project_id }
+        return len(self.neutron.list_subnets(retrieve_all=False,**_params)['subnets'] > 0)
 
     def __list_quota(self,project_id):
         return self.neutron.show_quota(project_id)['quota']
