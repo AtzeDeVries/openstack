@@ -15,8 +15,6 @@ class Cinder():
         sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
         self.cinder = client.Client("2",session=sess)
 
-    def list(self):
-        print self.cinder.volumes.list()
 
     def update_quota(self,project_id,items):
         updates = self.__quota_compare(project_id,items)
@@ -24,21 +22,15 @@ class Cinder():
             updates.update({"tenant_id": project_id})
             try:
                 self.cinder.quotas.update(**updates)
-                log.logger.debug("trying to update project_id: %s with quota: %s" % (project_id,updates))
-                return True
+                log.logger.info("trying to update project_id: %s with quota: %s" % (project_id,updates))
             except Exception as e:
-                log.logger.debug(e)
-                return False
-        else:
-            return None
-                
+                log.logger.warning(e)
+
     def __get_quota(self,project_id):
-        #print self.cinder.quotas.get(project_id)
         return self.cinder.quotas.get(project_id)
 
     def __quota_compare(self,project_id,items):
         current = self.__get_quota(project_id)
-        print current
         new = {}
         for key,value in items.iteritems():
             try:

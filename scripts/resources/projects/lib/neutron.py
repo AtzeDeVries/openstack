@@ -27,31 +27,31 @@ class Neutron():
         new = self.__quota_compare(project_id,items)
         if new != {}:
             try:
-                log.logger.debug("Trying to update quota of %s with %s" % (project_id,new))
+                log.logger.info("Trying to update quota of %s with %s" % (project_id,new))
                 self.neutron.update_quota(project_id,{'quota':new})
-                return True
             except Exception as e:
-                log.logger.debug("Failed to update quota of %s with %s" % (project_id,new))
-                log.logger.debgug(e)
-                return False
+                log.logger.warning("Failed to update quota of %s with %s" % (project_id,new))
+                log.logger.debug(e)
         else:
             log.logger.debug("No need to update neutron quota of %s" % project_id)
-            return None
 
     def create_default_network(self,project_id):
         state = [self.__router_exists(project_id), self.__network_exists(project_id), self.__subnet_exists(project_id)]
         if not any(state):
-            log.logger.debug("Creating a network for %s" % project_id)
-            new_router = self.neutron.create_router(body={'router': {'tenant_id': project_id , 'admin_state_up': True ,'name' : 'router', 'distributed': True} })['router']['id']
-            self.neutron.add_gateway_router(new_router, body={"network_id": "8e314b96-ae2b-41ac-bed0-5944816f56d8"})
-            new_network = self.neutron.create_network(body={'network': {'tenant_id': project_id, 'name': 'network'}})['network']['id']
-            new_subnet = self.neutron.create_subnet(body={'subnet':{'tenant_id':project_id,
-                                                                    'name':'subnet',
-                                                                    'ip_version': 4,
-                                                                    'network_id': new_network,
-                                                                    'cidr': '172.16.1.0/24',
-                                                                    'dns_nameservers':['8.8.8.8','8.8.4.4']}})['subnet']['id']
-            self.neutron.add_interface_router(new_router,{'subnet_id': new_subnet})
+            try:
+                log.logger.info("Creating a network for %s" % project_id)
+                new_router = self.neutron.create_router(body={'router': {'tenant_id': project_id , 'admin_state_up': True ,'name' : 'router', 'distributed': True} })['router']['id']
+                self.neutron.add_gateway_router(new_router, body={"network_id": "8e314b96-ae2b-41ac-bed0-5944816f56d8"})
+                new_network = self.neutron.create_network(body={'network': {'tenant_id': project_id, 'name': 'network'}})['network']['id']
+                new_subnet = self.neutron.create_subnet(body={'subnet':{'tenant_id':project_id,
+                                                                        'name':'subnet',
+                                                                        'ip_version': 4,
+                                                                        'network_id': new_network,
+                                                                        'cidr': '172.16.1.0/24',
+                                                                        'dns_nameservers':['8.8.8.8','8.8.4.4']}})['subnet']['id']
+                self.neutron.add_interface_router(new_router,{'subnet_id': new_subnet})
+            except Exception as e:
+                log.logger.warning(e)
 
         else:
             log.logger.debug("No network creating neccecary for %s" % project_id)
