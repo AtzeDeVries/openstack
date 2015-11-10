@@ -43,7 +43,7 @@ class Neutron():
         if not any(state):
             log.logger.debug("Creating a network for %s" % project_id)
             new_router = self.neutron.create_router(body={'router': {'tenant_id': project_id , 'admin_state_up': True ,'name' : 'router', 'distributed': True} })['router']['id']
-            print new_router
+            self.neutron.add_gateway_router(new_router, body={"network_id": "8e314b96-ae2b-41ac-bed0-5944816f56d8"})
         else:
             log.logger.debug("No network creating neccecary for %s" % project_id)
 
