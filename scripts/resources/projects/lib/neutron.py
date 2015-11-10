@@ -23,7 +23,19 @@ class Neutron():
 
     def update_quota(self,project_id,items):
         new = self.__quota_compare(project_id,items)
-        print new
+        if new != {}:
+            try:
+                log.logger.debug("Trying to update quota of %s with %s" % (project_id,new))
+                self.neutron.update_quota(project_id,{'quota':new})
+                return True
+            except Exception as e:
+                log.logger.debug("Failed to update quota of %s with %s" % (project_id,new))
+                log.logger.debgug(e)
+                return False
+        else:
+            log.logger.debug("No need to update neutron quota of %s" % project_id)
+            return None
+
 
     def __list_quota(self,project_id):
         return self.neutron.show_quota(project_id)['quota']
