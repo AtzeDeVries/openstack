@@ -46,13 +46,14 @@ for pf in project_files:
 
     qu = nova.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['nova'])
     if qu:
-        log.logger.info("Succesfully updated quota of %s with %s" % (data['name'], data['quotas']['nova']))
+        log.logger.info("Succesfully updated nova quota of %s with %s" % (data['name'], data['quotas']['nova']))
     elif qu is None:
-        log.logger.info("No need to update quota of %s" % data['name'])
+        log.logger.info("No need to update nova quota of %s" % data['name'])
     else:
-        log.logger.warning("Failed to update quota for %s" % data['name'])
+        log.logger.warning("Failed to update nova quota for %s" % data['name'])
 
-    neutron.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['neutron'])
+    neutron.testy(keystone.project_name_to_id(data['name']))
+    #neutron.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['neutron'])
 
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:

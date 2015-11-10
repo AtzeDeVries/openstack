@@ -18,6 +18,9 @@ class Neutron():
                                      ca_cert='./stack_naturalis_nl.ca-bundle')
 
 
+    def testy(project_id):
+        print self.__list_quota(project_id)
+        
     def update_quota(self,project_id,items):
         new = self.__quota_compare(project_id,items)
         print new
