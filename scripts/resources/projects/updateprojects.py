@@ -17,14 +17,15 @@ try:
 except KeyError as e:
     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
     exit(1)
-#
+
 keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
-#
+
 nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
 
 project_files = [ join('projects.d',f) for f in listdir('projects.d') if (isfile(join('projects.d',f)) and f[-5:] == '.yaml') ]
 
 flavors_to_projects = {}
+
 
 for pf in project_files:
     log.logger.debug("Using filename: %s" % pf)
@@ -38,10 +39,15 @@ for pf in project_files:
 
     keystone.update_access_to_project(data['name'], data['groups'])
 
-    log.logger.debug("listing quota's")
-    #print nova.list_quota(keystone.project_name_to_id(data['name']))
-    print nova.update_quota(keystone.project_name_to_id(data['name']), 
-                            data['quotas']['nova'])
+    qu = nova.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['nova'])
+    if qu:
+        log.logger.info("Succesfully updated quota of %s with %s" % (data['name'], data['quotas']['nova']))
+    elif qu is None:
+        log.logger.info("No need to update quota of %s" % data['name'])
+    else:
+        log.logger.warning("Failed to update quota for %s" % data['name'])
+
+    log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:
         if flavors_to_projects.get(fl):
             flavors_to_projects[fl].append(data['name'])

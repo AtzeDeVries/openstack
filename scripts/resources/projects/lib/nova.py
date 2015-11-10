@@ -32,14 +32,17 @@ class Nova():
 
     def update_quota(self,project_id,items):
         kwargs = self.__quota_compare(project_id,items)
-        kwargs.update({"tenant_id": project_id})
-        try:
-            self.nova.quotas.update(**kwargs)
-            log.logger.info("updating project_id: %s with quota: %s" % (project_id,kwargs))
-            return True
-        except Exception as e:
-            log.logger.warning("updating project_id: %s FAILED with quota: %s" % (project_id,kwargs))
-            return False
+        if kwargs != {}:
+            kwargs.update({"tenant_id": project_id})
+            try:
+                self.nova.quotas.update(**kwargs)
+                log.logger.debug("trying to update project_id: %s with quota: %s" % (project_id,kwargs))
+                return True
+            except Exception as e:
+                log.logger.debug(e)
+                return False
+        else:
+            return None
 
         # current = self.__list_quota(project_id)
         # new = {}
