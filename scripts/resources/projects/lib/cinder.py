@@ -31,7 +31,7 @@ class Cinder():
         new = {}
         for key,value in items.iteritems():
             try:
-                if value != current[key]:
+                if value != getattr(current,key):
                     new.update({key: value})
             except Exception as e:
                 log.logger.warning("Could not parse quota of project %s with quota setting %s" % (project_id,key))
