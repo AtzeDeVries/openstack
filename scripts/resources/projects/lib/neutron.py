@@ -19,9 +19,9 @@ class Neutron():
 
 
     def testy(self,project_id):
-        print self.__list_routers(project_id)
-        print self.__list_networks(project_id)
-        print self.__list_subnets(project_id)
+        print self.__router_exists(project_id)
+        print self.__network_exists(project_id)
+        print self.__subnet_exists(project_id)
 
     def update_quota(self,project_id,items):
         new = self.__quota_compare(project_id,items)

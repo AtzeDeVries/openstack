@@ -60,7 +60,9 @@ for pf in project_files:
     else:
         log.logger.warning("Failed to update Neutron quota for %s" % data['name'])
 
-    
+    print '-------NETWORKTEST-----'
+    neutron.testy(keystone.project_name_to_id(data['name']))
+    print '---------------------'
 
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:
