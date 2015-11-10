@@ -53,7 +53,7 @@ for pf in project_files:
         log.logger.warning("Failed to update nova quota for %s" % data['name'])
 
     neutron.testy(keystone.project_name_to_id(data['name']))
-    #neutron.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['neutron'])
+    neutron.update_quota(keystone.project_name_to_id(data['name']), data['quotas']['neutron'])
 
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:
