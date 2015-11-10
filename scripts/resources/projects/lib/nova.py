@@ -3,8 +3,6 @@ from keystoneclient import session
 from novaclient import client
 from . import log
 
-allowed_types = ['ha_localdisk','hpc','ha_ceph']
-
 
 class Nova():
 
@@ -44,19 +42,6 @@ class Nova():
         else:
             return None
 
-        # current = self.__list_quota(project_id)
-        # new = {}
-        # if items['cpu'] != current.cores:
-        #     new.update({'cores': items['cpu']})
-        # if items['ram'] != current.ram:
-        #     new.update({'ram': items['ram']})
-        # if items['floatingips'] != current.floating_ips:
-        #     new.update({'floating_ips' : items['floating_ips']})
-        # if items['instances'] != current.instances:
-        #     new.update({'instances': items['instances']})
-        # if items['securitygroups'] != current.security_groups:
-
-#< instances=100, key_pairs=10, metadata_items=1024, ram=51200, security_group_rules=20, security_groups=10, server_group_members=10, server_groups=10>
 
     def __quota_compare(self,project_id,items):
         current = self.__list_quota(project_id)

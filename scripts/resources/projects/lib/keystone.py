@@ -66,10 +66,10 @@ class KeyStone:
             if gn not in current_names:
                 log.logger.warning("'%s' is not an excisting group" % gn)
                 to_be_deleted.append(gn)
-        # clean up list
+
         for d in to_be_deleted:
             group_names.remove(d)
-        #group_id = self.ksclient.groups.list(name=group_name)[0].id
+
         current_access = []
         current_denied = []
         project_id = self.ksclient.projects.list(name=project_name)[0].id
@@ -83,8 +83,7 @@ class KeyStone:
                 current_access.append(g.name)
             except:
                 log.logger.debug("Assuming that group '%s' has no access to '%s'" % (g.name,project_name))
-        #print current_access
-        #print current_denied
+
         added = [a for a in group_names if (a not in current_access and a not in excludes)]
         removed = [ r for r in current_access if (r not in group_names and r not in excludes) ]
 
@@ -100,205 +99,25 @@ class KeyStone:
             grp_id = self.ksclient.groups.list(name=r)[0].id
             log.logger.info("Revoking access of %s to %s" % (r,project_name))
             self.ksclient.roles.revoke(self.member_role_id,group=grp_id,project=project_id)
-            #group_access.update({g.name: self.ksclient.roles.check(self.member_role_id,group=g.id,project=project_id)})
-        #log.logger.debug("groupaccess: %s" % group_access)
-        # current_access = self.ksclient.roles.list(group=group_id, project=project_id)
-        # for ca in current_access:
-        #     print ca
+
     def check_if_project_excists(self,project_name):
+        """
+        Checks if projects (tenant) excists.
+        : param str project_name: name of project
+        Returns True or False
+        """
         return len(self.ksclient.projects.list(name=project_name)) > 0
 
     def project_id_to_name(self,projectid):
+        """
+        Returns the name of the project when id is given
+        : param str projectid: id of the project
+        """
         return self.ksclient.projects.get(projectid).name
 
     def project_name_to_id(self,projectname):
+        """
+        Returns the id of the project when project name is given
+        : param str projectname: name of the project
+        """
         return self.ksclient.projects.list(name=projectname)[0].id
-    # def connect(auth_url,ks_username,ks_password,project_name):
-    #     """
-    #     Generates a keystone client session object. Takes:
-    #     * Keystone V3 auth url
-    #     * Username
-    #     * Password
-    #     * Project name
-    #     returns a keystone client object.
-    #     """
-    #     auth = v3.Password(auth_url=auth_url,
-    #                        username=ks_username,
-    #                        password=ks_password,
-    #                        project_name=project_name,
-    #                        user_domain_name='Default',
-    #                        project_domain_id='Default')
-    #
-    #     sess = session.Session(auth=auth)
-    #
-    #     return client.Client(session=sess)
-    #
-    # def user_exists(client,username):
-    #     """
-    #     Checks if user exists. Takes:
-    #     * keystone client object
-    #     * username
-    #     Returns bool
-    #     """
-    #     return len(client.users.list(name=username)) != 0
-    #
-
-    #
-    #
-    # def get_id_ks_group(client,grp):
-    #     """
-    #     Find id of a keystone group. Takes:
-    #     * keystone client object
-    #     * Groupname
-    #     Returns id (as string) or False if group not found
-    #     """
-    #     try:
-    #         return client.groups.list(name=grp)[0].id
-    #     except:
-    #         return False
-    #
-    # def generate_password(numbers=10):
-    #     """
-    #     Generates complex password. Takes:
-    #     * number of digit (default 10)
-    #     Returns password
-    #     """
-    #     chars = ascii_letters + digits + '#$%^*()'
-    #     random.seed = (urandom(1024))
-    #     return ''.join(random.choice(chars) for i in range(numbers))
-    #
-    #
-    # def create_user(client,username,sync_group_id,to_address):
-    #     """
-    #     Creates user in keystone. Takes:
-    #     * keystone client object
-    #     * username
-    #     * keystone id of sync ad user group
-    #     Returns True is succeeded, false if issues.
-    #     """
-    #
-    #     try:
-    #         pwd = generate_password()
-    #         client.users.create(name=username,
-    #                             email=username+'@naturalis.nl',
-    #                             password=pwd)
-    #         uid = client.users.list(name=username)[0].id
-    #         client.users.add_to_group(uid,sync_group_id)
-    #         sendaccountmail(to_address,username,pwd)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to create user %s OR add it to group. Error: %s' % (username,e))
-    #         return False
-    #
-    # def enable_user(client,username):
-    #     """
-    #     enables user in keystone. Takes:
-    #     * keystone client object
-    #     * username
-    #     Returns True is succeeded, false if issues.
-    #     """
-    #
-    #     try:
-    #         uid = client.users.list(name=username)[0].id
-    #         client.users.update(uid,enabled=True)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to enable user %s. Error: %s' % (username,e))
-    #         return False
-    #
-    # def disable_user(client,username):
-    #     """
-    #     disables user in keystone. Takes:
-    #     * keystone client object
-    #     * username
-    #     Returns True is succeeded, false if issues.
-    #     """
-    #     try:
-    #         desc = "disabled_at:%s" % time.strftime("%d.%m.%Y")
-    #         uid = client.users.list(name=username)[0].id
-    #         client.users.update(uid,enabled=False,description=desc)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to disable user %s. Error: %s' % (username,e))
-    #         return False
-    #
-    # def create_group(client,groupname):
-    #     """
-    #     Creates group in keystone. Takes:
-    #     * keystone client object
-    #     * groupname
-    #     Returns True is succeeded, false if issues.
-    #     """
-    #     try:
-    #         client.groups.create(name=groupname)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to create group %s. Error: %s' % (groupname,e))
-    #         return False
-    #
-    # def delete_group(client,groupname):
-    #     """
-    #     Deletes group in keystone. Takes:
-    #     * keystone client object
-    #     * groupname
-    #     Returns True is succeeded, false if issues.
-    #     """
-    #     try:
-    #         gid = client.groups.list(name=groupname)[0].id
-    #         gobj = client.groups.delete(gid)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to delete group %s. Error: %s' % (groupname,e))
-    #         return False
-    #
-    # def add_user_to_group(client,groupname,username):
-    #     """
-    #     Adds user to group in keystone, Takes:
-    #     * keystone client object
-    #     * groupname
-    #     * username
-    #     Returns True if succeeded, false if issues
-    #     """
-    #     try:
-    #         gid = client.groups.list(name=groupname)[0].id
-    #         uid = client.users.list(name=username)[0].id
-    #         client.users.add_to_group(uid,gid)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to add %s group %s. Error: %s' % (username,groupname,e))
-    #         return False
-    #
-    # def remove_user_from_group(client,groupname,username):
-    #     """
-    #     Remove user to group in keystone, Takes:
-    #     * keystone client object
-    #     * groupname
-    #     * username
-    #     Returns True if succeeded, false if issues
-    #     """
-    #     try:
-    #         gid = client.groups.list(name=groupname)[0].id
-    #         uid = client.users.list(name=username)[0].id
-    #         client.users.remove_from_group(uid,gid)
-    #         return True
-    #     except Exception as e:
-    #         log.logger.error('Unable to remove %s group %s. Error: %s' % (username,groupname,e))
-    #         return False
-    #
-    # def sendaccountmail(to,username,password):
-    #     """
-    #     Send an email to a email adress which contains
-    #     the username and pass of the created user. Takes:
-    #     * email address to send to
-    #     * username
-    #     * password
-    #     """
-    #     text = "An stack.naturalis.nl account has been created for:\n username: %s\n password: %s" % (username,password)
-    #     msg = MIMEText(text)
-    #     msg['Subject'] = 'stack.naturalis.nl account has been created for %s' % username
-    #     msg['From'] = 'noreply@naturalis.nl'
-    #     msg['To'] = to
-    #
-    #     s = smtplib.SMTP('aspmx.l.google.com')
-    #     s.sendmail('noreply@naturalis.nl',[to],msg.as_string())
-    #     s.quit()

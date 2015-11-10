@@ -21,6 +21,10 @@ except KeyError as e:
 keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
 
 nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
+cinder = Cinder(auth_url_v2,ks_username,ks_password,project_name)
+
+cinder.list()
+exit(1)
 
 project_files = [ join('projects.d',f) for f in listdir('projects.d') if (isfile(join('projects.d',f)) and f[-5:] == '.yaml') ]
 
@@ -57,9 +61,7 @@ for pf in project_files:
 
 
 for key,value in flavors_to_projects.iteritems():
-    #print "\nFlavor %s has" % key
-    # users that should have = value
-    # current is
+
     excludes = ['SNB','admin']
     try:
         current = []
@@ -85,16 +87,3 @@ for key,value in flavors_to_projects.iteritems():
     except NameError as e:
         log.logger.warning("Flavor with name %s does not excist" % key)
         log.logger.debug(e)
-
-
-
-    #
-    # for pr in value:
-    #     print " - %s" % pr
-    # print "Current access of %s" % key
-    # access = nova.show(key)
-    # if access is not None:
-    #     print "acces with id: %s which is groupname: %s" % (access[0].tenant_id,keystone.project_id_to_name(access[0].tenant_id))
-
-#keystone.create_project('testproject')
-#keystone.update_access_to_project('zooi',['SNB','piet','Rely','hpc_users'])
