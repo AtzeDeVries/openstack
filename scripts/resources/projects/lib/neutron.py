@@ -1,5 +1,5 @@
-from keystoneclient.auth.identity import v2
-from keystoneclient import session
+#from keystoneclient.auth.identity import v2
+#from keystoneclient import session
 from neutronclient.v2_0 import client
 from . import log
 
@@ -8,12 +8,13 @@ from . import log
 class Neutron():
 
     def __init__(self,auth_url,username,password,tenant_name):
-        auth = v2.Password(auth_url=auth_url,
-                           username=username,
-                           password=password,
-                           tenant_name=tenant_name)
-        sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
-        self.neutron = client.Client("2",session=sess)
+        # auth = v2.Password(auth_url=auth_url,
+        #                    username=username,
+        #                    password=password,
+        #                    tenant_name=tenant_name)
+        # sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
+        self.neutron = client.Client(username=username,password=password,
+                                     tenant_name=tenant_name,auth_url=auth_url)
 
     def list(self):
         print self.neutron.list_quotas()
