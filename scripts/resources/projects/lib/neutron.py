@@ -38,6 +38,13 @@ class Neutron():
             log.logger.debug("No need to update neutron quota of %s" % project_id)
             return None
 
+    def create_default_network(self,project_id):
+        state = [self.__router_exists(project_id), self.__network_exists(project_id) self.__subnet_exists(project_id)]
+        if not any(state):
+            log.logger.debug("No network exists,creating a network for %s" % project_id)
+        else:
+            log.logger.debug("No network creating neccecary for %s" % project_id)
+            
     def __router_exists(self,project_id):
         _params = {'tenant_id' : project_id }
         return len(self.neutron.list_routers(retrieve_all=True,**_params)['routers']) > 0
