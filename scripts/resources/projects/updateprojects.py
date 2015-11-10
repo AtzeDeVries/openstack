@@ -5,6 +5,9 @@ from os import environ, listdir
 from os.path import isfile,join
 from lib.keystone import KeyStone
 from lib.nova import Nova
+from lib.cinder import Cinder
+from lib.neutron import Neutron
+
 from glob import glob
 from lib import log
 
@@ -22,8 +25,10 @@ keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
 
 nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
 cinder = Cinder(auth_url_v2,ks_username,ks_password,project_name)
+neutron = Neutron(auth_url_v2,ks_username,ks_password,project_name)
 
-cinder.list()
+
+neutron.list()
 exit(1)
 
 project_files = [ join('projects.d',f) for f in listdir('projects.d') if (isfile(join('projects.d',f)) and f[-5:] == '.yaml') ]

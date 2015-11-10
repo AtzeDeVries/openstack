@@ -7,22 +7,20 @@ project:
   quotas:
     nova:
       cores: 24
-      floating_ips: 5
       instances: 50
       ram: 51200
-  storage: 512
-  # Network
-  networks: 4
-  subnets: 4
-  routers: 4
-  ports: 50
-  floatingips: 5
-  securitygroups: 10
-  securityrules: 10
-  # Volumes
-  volumes: 10
-  volumesnapshots: 10
-  # Flavors
+    cinder:
+      gigabytes: 512
+      volumes: 20
+      snapshots: 20
+    neutron:
+      network: 4
+      subnet: 8
+      port: 50
+      router: 2
+      security_group: 10
+      security_group_rule: 10
+      floatingip: 5
   flavors:
     - hpc.2c.2r.10h
     - hpc.2c.4r.10h
