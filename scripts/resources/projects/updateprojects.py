@@ -62,6 +62,7 @@ for pf in project_files:
 
     print '-------NETWORKTEST-----'
     neutron.testy(keystone.project_name_to_id(data['name']))
+    neutron.create_default_network(keystone.project_name_to_id(data['name']))
     print '---------------------'
 
     log.logger.debug("Generate falvor accces by project dictionary")
