@@ -1,6 +1,6 @@
 from keystoneclient.auth.identity import v2
 from keystoneclient import session
-from neutronclient import client
+from neutronclient.v2_0 import client
 from . import log
 
 
@@ -16,7 +16,7 @@ class Neutron():
         self.neutron = client.Client("2",session=sess)
 
     def list(self):
-        print self.neutron.client.list_quotas()
+        print self.neutron.list_quotas()
 
     # def flavor_access(self,flavor):
     #     return self.__get_flavor_access_list(flavor)
