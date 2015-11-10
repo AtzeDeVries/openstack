@@ -22,8 +22,8 @@ class Cinder():
         return self.__quota_compare(project_id,items)
 
     def __get_quota(self,project_id):
-        print self.cinder.quotas.get(project_id)
-        return self.cinder.quotas.get(project_id)['quota_set']
+        #print self.cinder.quotas.get(project_id)
+        return self.cinder.quotas.get(project_id)
 
     def __quota_compare(self,project_id,items):
         current = self.__get_quota(project_id)
