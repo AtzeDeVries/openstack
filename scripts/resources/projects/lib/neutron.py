@@ -51,7 +51,7 @@ class Neutron():
                                                                     'network_id': new_network,
                                                                     'cidr': '172.16.1.0/24',
                                                                     'dns_nameservers':['8.8.8.8','8.8.4.4']}})['subnet']['id']
-
+            self.neutron.add_interface_router(new_router,{'subnet_id': new_subnet})
 
         else:
             log.logger.debug("No network creating neccecary for %s" % project_id)
