@@ -19,8 +19,19 @@ class Cinder():
         print self.cinder.volumes.list()
 
     def update_quota(self,project_id,items):
-        return self.__quota_compare(project_id,items)
-
+        updates = self.__quota_compare(project_id,items)
+        if updates != {}:
+            updates.update({"tenant_id": project_id})
+            try:
+                self.cinder.quotas.update(**updates)
+                log.logger.debug("trying to update project_id: %s with quota: %s" % (project_id,updates))
+                return True
+            except Exception as e:
+                log.logger.debug(e)
+                return False
+        else:
+            return None
+                
     def __get_quota(self,project_id):
         #print self.cinder.quotas.get(project_id)
         return self.cinder.quotas.get(project_id)
