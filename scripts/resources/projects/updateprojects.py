@@ -25,8 +25,8 @@ from lib import config
 
 #### Get settings from INI
 pfd = config.get('yaml_project_dir')
-auth_url = config.get('admin_endpoint_ip') + ':35357/v3'
-auth_url_v2 = config.get('admin_endpoint_ip') + ':35357/v2.0'
+auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v3'
+auth_url_v2 = 'http://' + config.get('admin_endpoint_ip') + ':35357/v2.0'
 ks_username = config.get('os_username')
 ks_password = config.get('os_password')
 project_name = config.get('os_project_name')
