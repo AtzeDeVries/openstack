@@ -7,7 +7,7 @@ from . import log
 
 class Neutron():
 
-    def __init__(self,auth_url,username,password,tenant_name):
+    def __init__(self,auth_url,username,password,tenant_name,ca_cert):
         # auth = v2.Password(auth_url=auth_url,
         #                    username=username,
         #                    password=password,
@@ -15,13 +15,8 @@ class Neutron():
         # sess = session.Session(auth=auth,verify='./stack_naturalis_nl.ca-bundle')
         self.neutron = client.Client(username=username,password=password,
                                      tenant_name=tenant_name,auth_url=auth_url,
-                                     ca_cert='./stack_naturalis_nl.ca-bundle')
+                                     ca_cert=ca_cert)
 
-
-    def testy(self,project_id):
-        print self.__router_exists(project_id)
-        print self.__network_exists(project_id)
-        print self.__subnet_exists(project_id)
 
     def update_quota(self,project_id,items):
         new = self.__quota_compare(project_id,items)

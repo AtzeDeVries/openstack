@@ -31,13 +31,14 @@ ks_username = config.get('os_username')
 ks_password = config.get('os_password')
 project_name = config.get('os_project_name')
 gateway_id = config.get('gateway_network_id')
+ca_bundle = config.get('ca_bundle_file')
 
 ### End Settings
 ### start API's
 keystone = KeyStone(auth_url,ks_username,ks_password,project_name)
-nova = Nova(auth_url_v2,ks_username,ks_password,project_name)
-cinder = Cinder(auth_url_v2,ks_username,ks_password,project_name)
-neutron = Neutron(auth_url_v2,ks_username,ks_password,project_name)
+nova = Nova(auth_url_v2,ks_username,ks_password,project_name,ca_bundle)
+cinder = Cinder(auth_url_v2,ks_username,ks_password,project_name,ca_bundle)
+neutron = Neutron(auth_url_v2,ks_username,ks_password,project_name,ca_bundle)
 
 ## get project files, skip default.yaml
 project_files = [ join(pfd,f) for f in listdir(pfd) if (isfile(join(pfd,f)) and f[-5:] == '.yaml' and f != 'default.yaml') ]

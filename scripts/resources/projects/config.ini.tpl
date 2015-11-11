@@ -5,3 +5,4 @@ os_username = admin
 os_password = secret
 os_project_name = admin
 gateway_network_id = 8e314b96-ae2b-41ac-bed0-5944816f56d8
+ca_bundle_file = your.ca-bundle
