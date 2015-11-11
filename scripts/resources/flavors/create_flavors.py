@@ -22,6 +22,7 @@ ks_username = config.get('os_username')
 ks_password = config.get('os_password')
 project_name = config.get('os_project_name')
 yaml_file = config.get('flavor_yaml_file')
+ca_bundle = config.get('ca_bundle_file')
 
 
 with open(yaml_file) as f:
@@ -38,8 +39,8 @@ with open(yaml_file) as f:
 
 auth = v2.Password(auth_url=auth_url, username=ks_username, password=ks_password, tenant_name=project_name)
 
-#sess = session.Session(auth=auth,verify='cert/stack_naturalis_nl.ca-bundle')
-sess = session.Session(auth=auth)
+sess = session.Session(auth=auth,verify=ca_bundle)
+#sess = session.Session(auth=auth)
 
 nova = client.Client("2",session=sess)
 

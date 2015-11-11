@@ -4,3 +4,4 @@ os_username = admin
 os_password = secret
 os_project_name = admin
 flavor_yaml_file = your_flavor_yaml
+ca_bundle_file = your.ca-bundle
