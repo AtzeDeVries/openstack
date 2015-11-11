@@ -8,15 +8,6 @@ from lib import ks as ks
 from lib import log as log
 from lib import config as config
 
-# Rewrite of user originisation
-# All stack users are in Team - Openstack
-# There are Groups in de Openstack OU
-# These groups create groups in Keystone and are used for membership
-# The combination of users in a Opensack - Group AND in Team - Openstack creates a user
-
-# host = '10.21.1.74'
-# ks_ad_group_sync_id = 'ae41c863c3474201957e330885deda5e'
-
 
 auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v3'
 ks_username = config.get('os_username')
@@ -29,29 +20,6 @@ to_address = config.get('account_mail_to')
 host = config.get('ad_host')
 ks_ad_group_sync_id = config.get('ks_ad_group_sync_id')
 
-# try:
-#     user = environ['AD_USER']
-#     password = environ['AD_PASS']
-# except KeyError as e:
-#     print "ERROR: create export of AD_USER (without domain) en AD_PASS to authenicate"
-#     exit(1)
-#
-# try:
-#     auth_url = environ['KS_ENDPOINT_V3']
-#     ks_username = environ['OS_USERNAME']
-#     ks_password = environ['OS_PASSWORD']
-#     project_name = environ['OS_PROJECT_NAME']
-# except KeyError as e:
-#     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
-#     exit(1)
-
-# try:
-#     to_address = environ['KS_MAILTO']
-# except KeyError as e:
-#     print "ERROR: export of var KS_MAILTO should exist"
-#     exit(1)
-
-#domain = "NNM\\"
 c = ad.connect(host,domain+user,password)
 ksclient = ks.connect(auth_url,ks_username,ks_password,project_name)
 

@@ -13,15 +13,7 @@ from lib.neutron import Neutron
 from lib import log
 from lib import config
 
-# try:
-#     auth_url = environ['KS_ENDPOINT_V3']
-#     auth_url_v2 = environ['OS_AUTH_URL']
-#     ks_username = environ['OS_USERNAME']
-#     ks_password = environ['OS_PASSWORD']
-#     project_name = environ['OS_PROJECT_NAME']
-# except KeyError as e:
-#     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
-#     exit(1)
+
 
 #### Get settings from INI
 pfd = config.get('yaml_project_dir')
