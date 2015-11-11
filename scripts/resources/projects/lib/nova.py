@@ -72,10 +72,10 @@ class Nova():
 
     def __get_flavor_id(self,flavor):
         all_flavors = self.nova.flavors.list(is_public=False)
-        log.logger.debug(all_flavors)
+        #log.logger.debug(all_flavors)
         exists = False
         for f in all_flavors:
-            log.logger.debug(f.name)
+            #log.logger.debug(f.name)
             if f.name == flavor:
                 exists = f.id
                 break
