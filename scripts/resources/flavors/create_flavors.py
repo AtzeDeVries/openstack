@@ -17,7 +17,7 @@ from lib import log
 #     print "Dont forget to source openrc"
 #     exit(1)
 
-auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v3'
+auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v2.0'
 ks_username = config.get('os_username')
 ks_password = config.get('os_password')
 project_name = config.get('os_project_name')
