@@ -14,8 +14,8 @@ from lib import config as config
 # These groups create groups in Keystone and are used for membership
 # The combination of users in a Opensack - Group AND in Team - Openstack creates a user
 
-host = '10.21.1.74'
-ks_ad_group_sync_id = 'ae41c863c3474201957e330885deda5e'
+# host = '10.21.1.74'
+# ks_ad_group_sync_id = 'ae41c863c3474201957e330885deda5e'
 
 
 auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v3'
@@ -26,6 +26,8 @@ user = config.get('ad_user')
 password = config.get('ad_password')
 domain = config.get('ad_domain') + '\\'
 to_address = config.get('account_mail_to')
+host = config.get('ad_host')
+ks_ad_group_sync_id = config.get('ks_ad_group_sync_id')
 
 # try:
 #     user = environ['AD_USER']
