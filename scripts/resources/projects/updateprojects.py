@@ -65,7 +65,7 @@ for pf in project_files:
     ### Set resources and Networks
     nova.update_quota(project_id, data['quotas']['nova'])
     neutron.update_quota(project_id, data['quotas']['neutron'])
-    neutron.create_default_network(project_id,gateway_id)
+    neutron.create_default_network(project_id,gateway_id,dns_servers=['172.16.51.4,172.16.51.5'])
     cinder.update_quota(project_id, data['quotas']['cinder'])
     #### Generate flavor to projects dictionary
     log.logger.debug("Generate falvor accces by project dictionary")

@@ -4,13 +4,18 @@ from keystoneclient.auth.identity import v2
 from keystoneclient import session
 from novaclient import client
 from os import environ
-
+import sys
 import yaml
 
 allowed_types = ['ha_localdisk','hpc','ha_ceph']
 
+yaml_file = sys.argv[1]
+if not yaml_file[-5:] == '.yaml':
+    print "Run this as ./create_flavors yaml_file.yaml"
+    print "Dont forget to source openrc"
+    exit(1)
 
-with open('flavor.yaml') as f:
+with open(yaml_file) as f:
     flavors = yaml.safe_load(f)
     f.close()
 

@@ -1,1 +1,1 @@
-__all__=['ad','log','ks']
+__all__=['ad','log','ks','config']
