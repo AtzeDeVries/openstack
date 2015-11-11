@@ -24,8 +24,8 @@ ks_password = config.get('os_password')
 project_name = config.get('os_project_name')
 user = config.get('ad_user')
 password = config.get('ad_password')
-domain = config.get('ad_domain')
-to_address = config.get('account_mail_to') 
+domain = config.get('ad_domain') + '\\'
+to_address = config.get('account_mail_to')
 
 # try:
 #     user = environ['AD_USER']
