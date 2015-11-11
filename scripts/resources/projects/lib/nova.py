@@ -71,7 +71,7 @@ class Nova():
             return self.nova.flavor_access._list_by_flavor(flid)
 
     def __get_flavor_id(self,flavor):
-        all_flavors = self.nova.flavors.list()
+        all_flavors = self.nova.flavors.list(is_public=False)
         log.logger.debug(all_flavors)
         exists = False
         for f in all_flavors:
