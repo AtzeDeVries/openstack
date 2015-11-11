@@ -94,5 +94,5 @@ for key,value in flavors_to_projects.iteritems():
             else:
                 log.logger.warning("Failed to remove %s to have acccess to %s" % (to_add, key))
     except NameError as e:
-        log.logger.warning("Flavor with name %s does not excist" % key)
+        log.logger.warning("Flavor with name %s does not exist" % key)
         log.logger.debug(e)
