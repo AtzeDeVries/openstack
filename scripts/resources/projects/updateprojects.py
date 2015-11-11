@@ -1,29 +1,36 @@
 #!/usr/bin/python2.7
 
 import yaml
+
 from os import environ, listdir
 from os.path import isfile,join
+from glob import glob
+
 from lib.keystone import KeyStone
 from lib.nova import Nova
 from lib.cinder import Cinder
 from lib.neutron import Neutron
-
-from glob import glob
 from lib import log
+from lib import config
 
-try:
-    auth_url = environ['KS_ENDPOINT_V3']
-    auth_url_v2 = environ['KS_ENDPOINT_V2']
-    ks_username = environ['OS_USERNAME']
-    ks_password = environ['OS_PASSWORD']
-    project_name = environ['OS_PROJECT_NAME']
-except KeyError as e:
-    print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
-    exit(1)
+# try:
+#     auth_url = environ['KS_ENDPOINT_V3']
+#     auth_url_v2 = environ['OS_AUTH_URL']
+#     ks_username = environ['OS_USERNAME']
+#     ks_password = environ['OS_PASSWORD']
+#     project_name = environ['OS_PROJECT_NAME']
+# except KeyError as e:
+#     print "ERROR: export of var KS_ENDPOINT_V3, OS_USERNAME, OS_PASSWORD and OS_PROJECT_NAME should exist"
+#     exit(1)
 
-
-#### Settings
-pfd = 'project.d'
+#### Get settings from INI
+pfd = config.get('yaml_project_dir')
+auth_url = config.get('admin_endpoint_ip') + ':35357/v3'
+auth_url_v2 = config.get('admin_endpoint_ip') + ':35357/v2.0'
+ks_username = config.get('os_username')
+ks_password = config.get('os_password')
+project_name = config.get('os_project_name')
+gateway_id = config.get('gateway_network_id')
 
 ### End Settings
 ### start API's
@@ -50,51 +57,16 @@ for pf in project_files:
         log.logger.debug("Create project name '%s'" % data['name'])
         keystone.create_project(data['name'])
 
-    ### Update project stuff
+    ### Set access to project
     keystone.update_access_to_project(data['name'], data['groups'])
-    ### Set project id
+    ### Get project id
     project_id = keystone.project_name_to_id(data['name'])
-
+    ### Set resources and Networks
     nova.update_quota(project_id, data['quotas']['nova'])
     neutron.update_quota(project_id, data['quotas']['neutron'])
+    neutron.create_default_network(project_id,gateway_id)
     cinder.update_quota(project_id, data['quotas']['cinder'])
-    #### Update nova quota
-    # qu = nova.update_quota(project_id, data['quotas']['nova'])
-    # if qu:
-    #     log.logger.info("Succesfully updated nova quota of %s with %s" % (data['name'], data['quotas']['nova']))
-    # elif qu is None:
-    #     log.logger.info("No need to update nova quota of %s" % data['name'])
-    # else:
-    #     log.logger.warning("Failed to update nova quota for %s" % data['name'])
-    #
-    # ####
-    # qu =  neutron.update_quota(project_id, data['quotas']['neutron'])
-    # if qu:
-    #     log.logger.info("Succesfully updated Neutron quota of %s with %s" % (data['name'], data['quotas']['neutron']))
-    # elif qu is None:
-    #     log.logger.info("No need to update Neutron quota of %s" % data['name'])
-    # else:
-    #     log.logger.warning("Failed to update Neutron quota for %s" % data['name'])
-    #
-    # # should be made a bit nicer
-    # nc = neutron.create_default_network(project_id)
-    # if nc
-    #     log.logger.info("Succesfully created network for %s with" % data['name'])
-    # elif nc is None:
-    #     log.logger.info("No need to create network %s" % data['name'])
-    # else:
-    #     log.logger.warning("Failed to create networks for %s" % data['name'])
-
-
-    # qu =  cinder.update_quota(project_id, data['quotas']['cinder'])
-    # if qu:
-    #     log.logger.info("Succesfully updated Cinder quota of %s with %s" % (data['name'], data['quotas']['cinder']))
-    # elif qu is None:
-    #     log.logger.info("No need to update Cinder quota of %s" % data['name'])
-    # else:
-    #     log.logger.warning("Failed to update Cinder quota for %s" % data['name'])
-
-
+    #### Generate flavor to projects dictionary
     log.logger.debug("Generate falvor accces by project dictionary")
     for fl in data['flavors']:
         if flavors_to_projects.get(fl):
@@ -103,7 +75,7 @@ for pf in project_files:
             flavors_to_projects[fl] = [data['name']]
 
 
-
+### run over all flavors(key) and check projects (value)
 for key,value in flavors_to_projects.iteritems():
 
     excludes = ['SNB','admin']
