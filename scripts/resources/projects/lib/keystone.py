@@ -45,7 +45,7 @@ class KeyStone:
         group_id = self.ksclient.groups.list(name='SNB')[0].id
         admin_role_id = self.ksclient.roles.list(name='admin')[0].id
 
-        new_project = self.ksclient.projects.create(name = projectname, domain = 'Default')
+        new_project = self.ksclient.projects.create(name = projectname, domain = 'default')
         log.logger.debug("New project created with id: %s" % new_project.id)
         log.logger.debug("Granting ADMIN access to SNB to project %s" % new_project.id)
 

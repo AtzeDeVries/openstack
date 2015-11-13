@@ -70,7 +70,7 @@ for pf in project_files:
 
 ### run over all flavors(key) and check projects (value)
 for key,value in flavors_to_projects.iteritems():
-
+    log.logger.debug("Now checking access of flavor: %s" % key)
     excludes = ['SNB','admin']
     try:
         current = []
