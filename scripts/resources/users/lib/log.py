@@ -1,7 +1,7 @@
 import logging
 
 
-filehandler = False
+filehandler = True
 
 level = logging.DEBUG
 #level = logging.INFO
@@ -14,7 +14,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s\t- %(module)s::%(func
 #logger.setFormatter(formatter)
 
 if filehandler:
-	fh = logging.FileHandler('adsync.log')
+	fh = logging.FileHandler('/var/log/adsync.log')
 	fh.setLevel(level)
 	fh.setFormatter(formatter)
 	logger.addHandler(fh)

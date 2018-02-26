@@ -1,13 +1,17 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python
+import sys
+import codecs
 
 from os import environ
-
 
 from lib import ad as ad
 from lib import ks as ks
 from lib import log as log
 from lib import config as config
 
+#reload(sys)
+#sys.setdefaultencoding('utf8')
+sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 
 auth_url = 'http://' + config.get('admin_endpoint_ip') + ':35357/v3'
 ks_username = config.get('os_username')
@@ -25,12 +29,16 @@ ksclient = ks.connect(auth_url,ks_username,ks_password,project_name)
 
 
 def sync_users():
-
+    #log.logger.debug('1 - Starting user sync %s' % sys.getdefaultencoding())
     all_users = ad.openstack_users(c)
+    #log.logger.debug('1.1 %s' % sys.getdefaultencoding() )
     ks_users = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=True)]
+    #log.logger.debug('1.2')
     ks_users_disabled = [u.name for u in ksclient.users.list(group=ks_ad_group_sync_id,enabled=False)]
+    #log.logger.debug('1.3')
     added_users = [x for x in all_users if x['username'] not in ks_users]
     disabled_users = [x for x in ks_users if x not in [q['username'] for q in all_users]]
+    #log.logger.debug('2 - Starting user sync')
 
     for u in added_users:
         log.logger.debug("Checking if %s already exists : %s" % ( u['username'], str(ks.user_exists(ksclient,u['username']))))
@@ -53,7 +61,8 @@ def sync_users():
             else:
                 log.logger.error("Unable to create user %s" % u['username'])
             ####
-
+    #log.logger.debug('3 - Starting user sync')
+   
     for u in disabled_users:
         log.logger.debug("Trying to disable user: %s" % u)
         ####
@@ -62,6 +71,7 @@ def sync_users():
         else:
             log.logger.error("Unable to disable user %s" % u)
         ####
+    #log.logger.debug('END - Starting user sync')
 
 def sync_groups():
     ad_groups = []

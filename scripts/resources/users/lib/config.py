@@ -1,4 +1,4 @@
-configfilename = 'config.ini'
+configfilename = '/root/openstack/scripts/resources/users/config.ini'
 
 import ConfigParser
 from . import log
